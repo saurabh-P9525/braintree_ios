@@ -44,6 +44,36 @@ private struct UIComponentsDemoView: View {
     @State private var submit: (() -> Void)?
     @State private var venmoColorIndex: Int = 0
     @State private var payPalColorIndex: Int = 0
+    @State private var savedFIStateIndex: Int = 1
+    @State private var showSavedCreditMessage: Bool = true
+
+    /// Maps the segmented selection to a `SavedPaymentMethodView` render state. Uses the
+    /// public preview initializer so every state is visible before the fetch API is wired.
+    private var savedPreviewState: SavedPaymentMethodPreviewState {
+        switch savedFIStateIndex {
+        case 0:
+            return .loading
+        case 1:
+            return .instrument(
+                FiSummary(
+                    type: "CARD",
+                    label: "Visa",
+                    lastDigits: "0199",
+                    imageURL: URL(string: "https://www.paypalobjects.com/ui-web/money-icons/card/visa.png")
+                )
+            )
+        case 2:
+            return .instrument(FiSummary(type: "BANK", label: "CREDIT UNION 1", lastDigits: "3357"))
+        case 3:
+            return .instrument(FiSummary(type: "CARD", label: "A Very Long Funding Instrument Bank Name", lastDigits: "1234"))
+        case 4:
+            return .displayOnly(email: "buyer@example.com")
+        case 5:
+            return .brandOnly
+        default:
+            return .hidden
+        }
+    }
 
     private var selectedVenmoColor: VenmoButtonColor {
         switch venmoColorIndex {
@@ -64,6 +94,39 @@ private struct UIComponentsDemoView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+
+                // Saved Payment Method (Edit FI) — UI-only, state seeded via preview initializer
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Saved Payment Method (Edit FI)")
+                        .font(.headline)
+
+                    Picker("FI State", selection: $savedFIStateIndex) {
+                        Text("Loading").tag(0)
+                        Text("Card").tag(1)
+                        Text("Bank (no image)").tag(2)
+                        Text("Truncation").tag(3)
+                        Text("Email only").tag(4)
+                        Text("Brand only").tag(5)
+                        Text("Hidden").tag(6)
+                    }
+                    .pickerStyle(.menu)
+
+                    // Demo target defines its own UIKit `Toggle`, so qualify the SwiftUI one.
+                    SwiftUI.Toggle("Show credit (Pay Later) message", isOn: $showSavedCreditMessage)
+                        .font(.caption)
+
+                    SavedPaymentMethodView(
+                        previewState: savedPreviewState,
+                        showCreditMessage: showSavedCreditMessage
+                    )
+                    .id("\(savedFIStateIndex)-\(showSavedCreditMessage)")
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4)
+                            .stroke(Color.gray.opacity(0.25))
+                    )
+                }
+
+                Divider()
 
                 // Color toggles
                 HStack(spacing: 12) {

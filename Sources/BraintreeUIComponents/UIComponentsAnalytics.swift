@@ -16,4 +16,16 @@ enum UIComponentsAnalytics {
 
     static let venmoButtonPresented = "ui-components:venmo-button:presented"
     static let venmoButtonSelected = "ui-components:venmo-button:selected"
+
+    // MARK: - Saved Payment Method Events
+
+    static let savedPaymentMethodPresented = "ui-components:saved-payment-method-component:presented"
+    static let savedPaymentMethodEditSelected = "ui-components:saved-payment-method-component:edit-selected"
+    static let savedPaymentMethodFetchFailed = "ui-components:saved-payment-method-component:sticky-fi:fetch-failed"
+
+    // MARK: - Credit Messaging Events
+
+    static let creditMessagingPresented = "ui-components:saved-payment-method-component:credit-messaging:presented"
+    static let creditMessagingSelected = "ui-components:saved-payment-method-component:credit-messaging:selected"
+    static let creditMessagingFailed = "ui-components:saved-payment-method-component:credit-messaging:failed"
 }

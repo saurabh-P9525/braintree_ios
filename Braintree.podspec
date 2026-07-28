@@ -100,7 +100,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec "UIComponents" do |s|
-    s.source_files = "Sources/BraintreeUIComponents/*.swift"
+    s.source_files = "Sources/BraintreeUIComponents/**/*.swift"
     s.dependency "Braintree/Core"
     s.dependency "Braintree/Card"
     s.dependency "Braintree/PayPal"
