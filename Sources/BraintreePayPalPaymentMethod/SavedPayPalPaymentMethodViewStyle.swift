@@ -144,11 +144,12 @@ public struct CreditMessagingStyle {
     /// Messaging text size. Default: 16 pt · Dynamic Type (floor 0).
     public var fontSize: CGFloat = 16
 
-    /// Placeholder message copy. Replaced by the fetched offer copy when the API is wired in.
-    public var messageText: String = "Or 4 interest-free payments of $324.50."
+    /// Internal placeholder copy for testing — not part of the public styling API. Replaced by
+    /// the fetched offer copy when the messaging API is wired in.
+    var messageText: String = "Or 4 interest-free payments of $324.50."
 
-    /// Placeholder "Learn more" copy.
-    public var learnMoreText: String = "Learn more"
+    /// Internal placeholder "Learn more" copy for testing — not part of the public styling API.
+    var learnMoreText: String = "Learn more"
 
     public init() {}
 }
