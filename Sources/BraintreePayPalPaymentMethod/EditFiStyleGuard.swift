@@ -1,0 +1,66 @@
+import CoreGraphics
+
+/// Platform-agnostic guardrails for `SavedPayPalPaymentMethodViewStyle` (styling doc §4).
+///
+/// Per the approved styling doc, every spacing/sizing/font-size field floors at `0`
+/// (never negative) with **no upper cap** — merchants have full discretion above the
+/// floor. Dynamic Type scaling on top of a font size is left unbounded so accessibility
+/// is preserved.
+enum EditFiStyleGuard {
+
+    /// Gap between the logo and the label: `[0, ∞)`.
+    static func logoLabelGap(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Gap between the label and FI clusters: `[0, ∞)`.
+    static func labelFiGap(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Label text size: `[0, ∞)`.
+    static func labelFontSize(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// FI text size: `[0, ∞)`.
+    static func fiTextFontSize(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Edit-icon size: `[0, ∞)`.
+    static func iconSize(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Credit-messaging text size: `[0, ∞)`.
+    static func creditMessageFontSize(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Container horizontal padding: `[0, ∞)`.
+    static func horizontalPadding(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Container vertical padding: `[0, ∞)`.
+    static func verticalPadding(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Container corner radius: `[0, ∞)`.
+    static func cornerRadius(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Container border width: `[0, ∞)`.
+    static func borderWidth(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    // MARK: - Private Helpers
+
+    private static func nonNegative(_ value: CGFloat) -> CGFloat {
+        max(value, 0)
+    }
+}
