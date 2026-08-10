@@ -36,17 +36,20 @@ extension View {
     }
 }
 
-/// A rounded, full-width shimmer placeholder bar.
+/// A rounded shimmer placeholder bar. Fills the available width minus `trailingGap`, so the
+/// bar stops short of the trailing edge (matching the design) rather than running edge-to-edge.
 struct ShimmerBar: View {
 
     var height: CGFloat = 22
     var cornerRadius: CGFloat = 11
+    var trailingGap: CGFloat = 0
 
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius)
             .fill(Color(.systemGray5))
             .frame(height: height)
             .frame(maxWidth: .infinity)
+            .padding(.trailing, trailingGap)
             .shimmering()
     }
 }
@@ -60,18 +63,18 @@ struct SavedPayPalPaymentMethodSkeletonRow: View {
     var body: some View {
         HStack(spacing: EditFiStyleGuard.fiClusterLeadingGap(style.container.fiCluster.leadingGap)) {
             PayPalBrandCluster(style: style)
-            ShimmerBar(height: 24, cornerRadius: 12)
+            ShimmerBar(height: 16, cornerRadius: 8, trailingGap: 40)
         }
         .accessibilityElement()
         .accessibilityLabel("Loading saved payment method")
     }
 }
 
-/// Loading placeholder for the credit-messaging line: a full-width shimmer bar.
+/// Loading placeholder for the credit-messaging line: a shimmer bar that stops short of the edge.
 struct CreditMessageSkeleton: View {
 
     var body: some View {
-        ShimmerBar(height: 16, cornerRadius: 8)
+        ShimmerBar(height: 16, cornerRadius: 8, trailingGap: 40)
             .accessibilityHidden(true)
     }
 }

@@ -38,8 +38,23 @@ enum EditFiStyleGuard {
         nonNegative(value)
     }
 
-    /// FI pill internal padding: `[0, ∞)`.
-    static func fiClusterPadding(_ value: CGFloat) -> CGFloat {
+    /// FI pill horizontal padding: `[0, ∞)`.
+    static func fiClusterHorizontalPadding(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// FI pill vertical padding: `[0, ∞)`.
+    static func fiClusterVerticalPadding(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// FI card-art corner radius: `[0, ∞)`.
+    static func cardIconCornerRadius(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// FI card-art border width: `[0, ∞)`.
+    static func cardIconBorderWidth(_ value: CGFloat) -> CGFloat {
         nonNegative(value)
     }
 

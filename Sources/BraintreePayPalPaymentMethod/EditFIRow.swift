@@ -22,8 +22,11 @@ struct EditFIRow: View {
 
     // MARK: - Layout constants
 
-    private let fiInnerSpacing: CGFloat = 8
-    private let cardArtWidth: CGFloat = 30
+    /// Gap between the card thumbnail and the masked number (the "view" group).
+    private let viewGroupSpacing: CGFloat = 4
+    /// Gap between the "view" group and the edit pencil.
+    private let viewEditSpacing: CGFloat = 8
+    private let cardArtWidth: CGFloat = 28
     private let cardArtHeight: CGFloat = 20
 
     // MARK: - Derived style values (guarded)
@@ -56,23 +59,29 @@ struct EditFIRow: View {
             switch content {
             case .instrument(let summary):
                 fiPill {
-                    fiIcon(for: summary)
-                    Text(fiText(for: summary))
-                        .font(fiFont)
-                        .foregroundColor(textColor)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                    editButton
+                    HStack(spacing: viewEditSpacing) {
+                        HStack(spacing: viewGroupSpacing) {
+                            fiIcon(for: summary)
+                            Text(fiText(for: summary))
+                                .font(fiFont)
+                                .foregroundColor(textColor)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }
+                        editButton
+                    }
                 }
                 .padding(.leading, fiClusterGap)
             case .displayOnly(let email):
                 fiPill {
-                    Text(email)
-                        .font(fiFont)
-                        .foregroundColor(textColor)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                    editButton
+                    HStack(spacing: viewEditSpacing) {
+                        Text(email)
+                            .font(fiFont)
+                            .foregroundColor(textColor)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        editButton
+                    }
                 }
                 .padding(.leading, fiClusterGap)
             case .brandOnly:
@@ -90,13 +99,12 @@ struct EditFIRow: View {
         PayPalBrandCluster(style: style)
     }
 
-    /// The rounded gray pill wrapping the FI content + edit pencil.
+    /// The rounded pill wrapping the FI content + edit pencil.
     private func fiPill<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
-        HStack(spacing: fiInnerSpacing) {
-            content()
-        }
-        .padding(EditFiStyleGuard.fiClusterPadding(style.container.fiCluster.padding))
-        .background(pillBackground)
+        content()
+            .padding(.horizontal, EditFiStyleGuard.fiClusterHorizontalPadding(style.container.fiCluster.horizontalPadding))
+            .padding(.vertical, EditFiStyleGuard.fiClusterVerticalPadding(style.container.fiCluster.verticalPadding))
+            .background(pillBackground)
     }
 
     @ViewBuilder private var pillBackground: some View {
@@ -124,13 +132,28 @@ struct EditFIRow: View {
         }
         .frame(width: cardArtWidth, height: cardArtHeight)
         .background(cardIconBackground)
-        .clipShape(RoundedRectangle(cornerRadius: style.container.fiCluster.cardIconCornerRadius > 0 ? style.container.fiCluster.cardIconCornerRadius : 3))
+        .clipShape(RoundedRectangle(cornerRadius: cardIconRadius))
+        .overlay(cardIconBorder)
         .accessibilityHidden(true)
+    }
+
+    private var cardIconRadius: CGFloat {
+        EditFiStyleGuard.cardIconCornerRadius(style.container.fiCluster.cardIconCornerRadius)
+    }
+
+    @ViewBuilder private var cardIconBorder: some View {
+        if let color = style.container.fiCluster.cardIconBorderColor {
+            RoundedRectangle(cornerRadius: cardIconRadius)
+                .strokeBorder(
+                    Color(uiColor: color),
+                    lineWidth: EditFiStyleGuard.cardIconBorderWidth(style.container.fiCluster.cardIconBorderWidth)
+                )
+        }
     }
 
     @ViewBuilder private var cardIconBackground: some View {
         if let color = style.container.fiCluster.cardIconBackgroundColor {
-            RoundedRectangle(cornerRadius: style.container.fiCluster.cardIconCornerRadius).fill(Color(uiColor: color))
+            RoundedRectangle(cornerRadius: cardIconRadius).fill(Color(uiColor: color))
         }
     }
 
@@ -149,7 +172,6 @@ struct EditFIRow: View {
                 .scaledToFit()
                 .frame(width: editIconSide, height: editIconSide)
                 .foregroundColor(textColor)
-                .padding(.leading, 2)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -164,7 +186,7 @@ struct EditFIRow: View {
             return summary.label
         }
         // Card art conveys the brand; the text is just the masked last digits.
-        return "•• \(lastDigits)"
+        return "••\(lastDigits)"
     }
 }
 
@@ -186,8 +208,15 @@ struct PayPalBrandCluster: View {
         )
     }
 
-    private var badgeHeight: CGFloat {
-        EditFiStyleGuard.labelFontSize(style.container.label.fontSize)
+    /// The PayPal logo (48×30 artwork) sits in a square (1:1) container. `logo.width` sets the
+    /// side (default 48); the artwork scales to fit inside, preserving its own aspect ratio.
+    static let defaultLogoSide: CGFloat = 48
+
+    private var logoSide: CGFloat {
+        if let width = style.container.logo.width {
+            return EditFiStyleGuard.logoWidth(width)
+        }
+        return Self.defaultLogoSide
     }
 
     var body: some View {
@@ -196,9 +225,7 @@ struct PayPalBrandCluster: View {
                 Image("PayPalBadge", bundle: .payPalPaymentMethod)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: style.container.logo.width.map { EditFiStyleGuard.logoWidth($0) })
-                    .frame(height: badgeHeight)
-                    .padding(6)
+                    .frame(width: logoSide, height: logoSide)
                     .accessibilityHidden(true)
             }
             if style.showLabel {

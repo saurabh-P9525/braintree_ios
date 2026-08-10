@@ -68,7 +68,7 @@ public struct SavedPayPalPaymentMethodView: View {
     }
 
     private var container: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             fiRegion
             creditRegion
         }
@@ -104,14 +104,25 @@ public struct SavedPayPalPaymentMethodView: View {
 
     @ViewBuilder private var creditRegion: some View {
         if viewModel.request.showCreditMessage, style.showCreditMessaging {
-            if viewModel.fiState == .loading {
-                CreditMessageSkeleton()
-            } else {
-                CreditMessagingRow(style: style) {
-                    viewModel.learnMoreTapped()
+            Group {
+                if viewModel.fiState == .loading {
+                    CreditMessageSkeleton()
+                } else {
+                    CreditMessagingRow(style: style) {
+                        viewModel.learnMoreTapped()
+                    }
                 }
             }
+            .padding(.leading, creditLeadingInset)
         }
+    }
+
+    /// Leading inset that aligns the credit-messaging line with the "PayPal" label (i.e. past
+    /// the logo). Zero when the logo is hidden and the label already starts at the leading edge.
+    private var creditLeadingInset: CGFloat {
+        guard style.showLogo else { return 0 }
+        let logoSide = style.container.logo.width.map { EditFiStyleGuard.logoWidth($0) } ?? PayPalBrandCluster.defaultLogoSide
+        return logoSide + EditFiStyleGuard.labelLeadingGap(style.container.label.leadingGap)
     }
 }
 

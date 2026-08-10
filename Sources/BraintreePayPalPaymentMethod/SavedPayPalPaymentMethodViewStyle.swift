@@ -80,7 +80,8 @@ public struct ContainerStyle {
 /// The PayPal brand logo.
 public struct LogoStyle {
 
-    /// Logo width. `nil` → sized to match the label font (default).
+    /// Side of the square (1:1) logo container. `nil` → 48×48 default. The 48×30 logo artwork
+    /// scales to fit inside, keeping its aspect ratio; growing this value grows both sides equally.
     public var width: CGFloat?
 
     public init() {}
@@ -92,8 +93,8 @@ public struct LabelStyle {
     /// Label text size. Default: 20 pt · Dynamic Type (floor 0).
     public var fontSize: CGFloat = 20
 
-    /// Gap between the logo and the label. Default: 6 (floor 0).
-    public var leadingGap: CGFloat = 6
+    /// Gap between the logo and the label. Default: 12.73 (floor 0).
+    public var leadingGap: CGFloat = 12.73
 
     public init() {}
 }
@@ -107,23 +108,32 @@ public struct FiClusterStyle {
     /// Edit (pencil) affordance size. Default: 16 pt (floor 0).
     public var editIconSize: CGFloat = 16
 
-    /// Gap between the label cluster and the FI cluster. Default: 12 (floor 0).
-    public var leadingGap: CGFloat = 12
+    /// Gap between the label cluster and the FI cluster. Default: 8 (floor 0).
+    public var leadingGap: CGFloat = 8
 
-    /// Background color of the FI pill. `nil` → no pill. Default: light gray.
-    public var backgroundColor: UIColor? = .systemGray6
+    /// Background color of the FI pill. `nil` → no pill. Default: `#F0F2F9`.
+    public var backgroundColor: UIColor? = UIColor(red: 240 / 255, green: 242 / 255, blue: 249 / 255, alpha: 1)
 
-    /// FI pill corner radius. Default: 12 (floor 0).
-    public var cornerRadius: CGFloat = 12
+    /// FI pill corner radius. Default: 6 (floor 0).
+    public var cornerRadius: CGFloat = 6
 
-    /// FI pill internal padding. Default: 8 (floor 0).
-    public var padding: CGFloat = 8
+    /// FI pill horizontal (leading/trailing) padding. Default: 8 (floor 0).
+    public var horizontalPadding: CGFloat = 8
+
+    /// FI pill vertical (top/bottom) padding. Default: 4 (floor 0).
+    public var verticalPadding: CGFloat = 4
 
     /// Optional background color behind the FI card art icon. `nil` → none.
     public var cardIconBackgroundColor: UIColor?
 
-    /// Corner radius for the FI card art icon. Default: 0.
-    public var cardIconCornerRadius: CGFloat = 0
+    /// Corner radius for the FI card art icon. Default: 3 (floor 0).
+    public var cardIconCornerRadius: CGFloat = 3
+
+    /// Border color for the FI card art icon. `nil` → no border. Default: `#CCCCCC`.
+    public var cardIconBorderColor: UIColor? = UIColor(white: 0.8, alpha: 1)
+
+    /// Border width for the FI card art icon. Default: 0.71 pt hairline (floor 0).
+    public var cardIconBorderWidth: CGFloat = 0.71
 
     public init() {}
 }
