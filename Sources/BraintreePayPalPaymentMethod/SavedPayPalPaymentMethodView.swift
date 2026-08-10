@@ -73,16 +73,16 @@ public struct SavedPayPalPaymentMethodView: View {
             creditRegion
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: style.component.height, alignment: .center)
-        .padding(.horizontal, EditFiStyleGuard.horizontalPadding(style.component.horizontalPadding))
-        .padding(.vertical, EditFiStyleGuard.verticalPadding(style.component.verticalPadding))
-        .background(Color(uiColor: style.root.backgroundColor ?? .clear))
-        .clipShape(RoundedRectangle(cornerRadius: EditFiStyleGuard.cornerRadius(style.component.cornerRadius)))
+        .frame(height: style.container.height, alignment: .center)
+        .padding(.horizontal, EditFiStyleGuard.horizontalPadding(style.container.horizontalPadding))
+        .padding(.vertical, EditFiStyleGuard.verticalPadding(style.container.verticalPadding))
+        .background(Color(uiColor: style.theme.backgroundColor ?? .clear))
+        .clipShape(RoundedRectangle(cornerRadius: EditFiStyleGuard.cornerRadius(style.container.cornerRadius)))
         .overlay(
-            RoundedRectangle(cornerRadius: EditFiStyleGuard.cornerRadius(style.component.cornerRadius))
+            RoundedRectangle(cornerRadius: EditFiStyleGuard.cornerRadius(style.container.cornerRadius))
                 .stroke(
-                    Color(uiColor: style.component.borderColor ?? .clear),
-                    lineWidth: EditFiStyleGuard.borderWidth(style.component.borderWidth)
+                    Color(uiColor: style.container.borderColor ?? .clear),
+                    lineWidth: EditFiStyleGuard.borderWidth(style.container.borderWidth)
                 )
         )
     }
@@ -103,7 +103,7 @@ public struct SavedPayPalPaymentMethodView: View {
     }
 
     @ViewBuilder private var creditRegion: some View {
-        if viewModel.request.showCreditMessage, style.creditMessaging.enabled {
+        if viewModel.request.showCreditMessage, style.showCreditMessaging {
             if viewModel.fiState == .loading {
                 CreditMessageSkeleton()
             } else {
@@ -187,10 +187,10 @@ struct SavedPayPalPaymentMethodView_Previews: PreviewProvider {
 
     private static var borderedStyle: SavedPayPalPaymentMethodViewStyle {
         var style = SavedPayPalPaymentMethodViewStyle()
-        style.component.cornerRadius = 8
-        style.component.borderColor = .systemGray4
-        style.component.borderWidth = 1
-        style.component.horizontalPadding = 12
+        style.container.cornerRadius = 8
+        style.container.borderColor = .systemGray4
+        style.container.borderWidth = 1
+        style.container.horizontalPadding = 12
         return style
     }
 

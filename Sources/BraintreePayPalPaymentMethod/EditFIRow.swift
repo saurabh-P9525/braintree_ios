@@ -22,9 +22,6 @@ struct EditFIRow: View {
 
     // MARK: - Layout constants
 
-    private let pillCornerRadius: CGFloat = 12
-    private let pillHorizontalPadding: CGFloat = 10
-    private let pillVerticalPadding: CGFloat = 6
     private let fiInnerSpacing: CGFloat = 8
     private let cardArtWidth: CGFloat = 30
     private let cardArtHeight: CGFloat = 20
@@ -32,22 +29,22 @@ struct EditFIRow: View {
     // MARK: - Derived style values (guarded)
 
     private var textColor: Color {
-        Color(uiColor: style.root.textColorBase ?? UIColor(white: 0.133, alpha: 1))
+        Color(uiColor: style.theme.textColorBase ?? UIColor(white: 0.133, alpha: 1))
     }
 
     private var fiFont: Font {
         SavedPayPalPaymentMethodFont.font(
-            name: style.layout.fontName,
-            size: EditFiStyleGuard.fiTextFontSize(style.layout.fiTextFontSize)
+            name: style.theme.fontName,
+            size: EditFiStyleGuard.fiTextFontSize(style.container.fiCluster.textFontSize)
         )
     }
 
     private var editIconSide: CGFloat {
-        EditFiStyleGuard.iconSize(style.layout.iconSize)
+        EditFiStyleGuard.editIconSize(style.container.fiCluster.editIconSize)
     }
 
-    private var labelFiGap: CGFloat {
-        EditFiStyleGuard.labelFiGap(style.layout.labelFiGap)
+    private var fiClusterGap: CGFloat {
+        EditFiStyleGuard.fiClusterLeadingGap(style.container.fiCluster.leadingGap)
     }
 
     // MARK: - Body
@@ -67,7 +64,7 @@ struct EditFIRow: View {
                         .truncationMode(.tail)
                     editButton
                 }
-                .padding(.leading, labelFiGap)
+                .padding(.leading, fiClusterGap)
             case .displayOnly(let email):
                 fiPill {
                     Text(email)
@@ -77,7 +74,7 @@ struct EditFIRow: View {
                         .truncationMode(.middle)
                     editButton
                 }
-                .padding(.leading, labelFiGap)
+                .padding(.leading, fiClusterGap)
             case .brandOnly:
                 EmptyView()
             }
@@ -98,14 +95,14 @@ struct EditFIRow: View {
         HStack(spacing: fiInnerSpacing) {
             content()
         }
-        .padding(.horizontal, pillHorizontalPadding)
-        .padding(.vertical, pillVerticalPadding)
+        .padding(EditFiStyleGuard.fiClusterPadding(style.container.fiCluster.padding))
         .background(pillBackground)
     }
 
     @ViewBuilder private var pillBackground: some View {
-        if let color = style.component.fiClusterBackgroundColor {
-            RoundedRectangle(cornerRadius: pillCornerRadius).fill(Color(uiColor: color))
+        if let color = style.container.fiCluster.backgroundColor {
+            RoundedRectangle(cornerRadius: EditFiStyleGuard.fiClusterCornerRadius(style.container.fiCluster.cornerRadius))
+                .fill(Color(uiColor: color))
         }
     }
 
@@ -127,13 +124,13 @@ struct EditFIRow: View {
         }
         .frame(width: cardArtWidth, height: cardArtHeight)
         .background(cardIconBackground)
-        .clipShape(RoundedRectangle(cornerRadius: style.component.cardIconCornerRadius > 0 ? style.component.cardIconCornerRadius : 3))
+        .clipShape(RoundedRectangle(cornerRadius: style.container.fiCluster.cardIconCornerRadius > 0 ? style.container.fiCluster.cardIconCornerRadius : 3))
         .accessibilityHidden(true)
     }
 
     @ViewBuilder private var cardIconBackground: some View {
-        if let color = style.component.cardIconBackgroundColor {
-            RoundedRectangle(cornerRadius: style.component.cardIconCornerRadius).fill(Color(uiColor: color))
+        if let color = style.container.fiCluster.cardIconBackgroundColor {
+            RoundedRectangle(cornerRadius: style.container.fiCluster.cardIconCornerRadius).fill(Color(uiColor: color))
         }
     }
 
@@ -178,32 +175,33 @@ struct PayPalBrandCluster: View {
     let style: SavedPayPalPaymentMethodViewStyle
 
     private var textColor: Color {
-        Color(uiColor: style.root.textColorBase ?? UIColor(white: 0.133, alpha: 1))
+        Color(uiColor: style.theme.textColorBase ?? UIColor(white: 0.133, alpha: 1))
     }
 
     private var labelFont: Font {
         SavedPayPalPaymentMethodFont.font(
-            name: style.layout.fontName,
-            size: EditFiStyleGuard.labelFontSize(style.layout.labelFontSize),
+            name: style.theme.fontName,
+            size: EditFiStyleGuard.labelFontSize(style.container.label.fontSize),
             weight: .bold
         )
     }
 
     private var badgeHeight: CGFloat {
-        EditFiStyleGuard.labelFontSize(style.layout.labelFontSize)
+        EditFiStyleGuard.labelFontSize(style.container.label.fontSize)
     }
 
     var body: some View {
-        HStack(spacing: EditFiStyleGuard.logoLabelGap(style.layout.logoLabelGap)) {
-            if style.layout.showLogo {
+        HStack(spacing: EditFiStyleGuard.labelLeadingGap(style.container.label.leadingGap)) {
+            if style.showLogo {
                 Image("PayPalBadge", bundle: .payPalPaymentMethod)
                     .resizable()
                     .scaledToFit()
+                    .frame(width: style.container.logo.width.map { EditFiStyleGuard.logoWidth($0) })
                     .frame(height: badgeHeight)
                     .padding(6)
                     .accessibilityHidden(true)
             }
-            if style.layout.showLabel {
+            if style.showLabel {
                 Text("PayPal")
                     .font(labelFont)
                     .foregroundColor(textColor)

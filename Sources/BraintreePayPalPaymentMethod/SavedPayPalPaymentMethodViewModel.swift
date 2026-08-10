@@ -77,7 +77,7 @@ final class SavedPayPalPaymentMethodViewModel: ObservableObject {
 
     func onAppear() {
         apiClient?.sendAnalyticsEvent(SavedPayPalPaymentMethodAnalytics.savedPayPalPaymentMethodPresented)
-        if request.showCreditMessage, style.creditMessaging.enabled {
+        if request.showCreditMessage, style.showCreditMessaging {
             apiClient?.sendAnalyticsEvent(SavedPayPalPaymentMethodAnalytics.creditMessagingPresented)
         }
 

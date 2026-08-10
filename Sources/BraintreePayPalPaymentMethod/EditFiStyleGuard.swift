@@ -9,12 +9,12 @@ import CoreGraphics
 enum EditFiStyleGuard {
 
     /// Gap between the logo and the label: `[0, ∞)`.
-    static func logoLabelGap(_ value: CGFloat) -> CGFloat {
+    static func labelLeadingGap(_ value: CGFloat) -> CGFloat {
         nonNegative(value)
     }
 
     /// Gap between the label and FI clusters: `[0, ∞)`.
-    static func labelFiGap(_ value: CGFloat) -> CGFloat {
+    static func fiClusterLeadingGap(_ value: CGFloat) -> CGFloat {
         nonNegative(value)
     }
 
@@ -29,7 +29,22 @@ enum EditFiStyleGuard {
     }
 
     /// Edit-icon size: `[0, ∞)`.
-    static func iconSize(_ value: CGFloat) -> CGFloat {
+    static func editIconSize(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// FI pill corner radius: `[0, ∞)`.
+    static func fiClusterCornerRadius(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// FI pill internal padding: `[0, ∞)`.
+    static func fiClusterPadding(_ value: CGFloat) -> CGFloat {
+        nonNegative(value)
+    }
+
+    /// Logo width: `[0, ∞)`.
+    static func logoWidth(_ value: CGFloat) -> CGFloat {
         nonNegative(value)
     }
 

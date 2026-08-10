@@ -13,27 +13,27 @@ struct CreditMessagingRow: View {
     let onLearnMore: () -> Void
 
     private var textColor: Color {
-        Color(uiColor: style.root.textColorBase ?? UIColor(white: 0.133, alpha: 1))
+        Color(uiColor: style.theme.textColorBase ?? UIColor(white: 0.133, alpha: 1))
     }
 
-    /// Accent for "Learn more". When no `primaryColor` is set, the link is distinguished by
+    /// Accent for "Learn more". When no `linkColor` is set, the link is distinguished by
     /// bold + underline in the base text color instead (styling doc §3.1).
     private var learnMoreColor: Color? {
-        style.root.primaryColor.map { Color(uiColor: $0) }
+        style.theme.linkColor.map { Color(uiColor: $0) }
     }
 
     private var font: Font {
         SavedPayPalPaymentMethodFont.font(
-            name: style.layout.fontName,
-            size: EditFiStyleGuard.creditMessageFontSize(style.creditMessaging.fontSize)
+            name: style.theme.fontName,
+            size: EditFiStyleGuard.creditMessageFontSize(style.container.creditMessaging.fontSize)
         )
     }
 
     var body: some View {
         // "Learn more" flows inline right after the message and wraps with it (matching design).
-        let message = Text(style.creditMessaging.messageText + " ")
+        let message = Text(style.container.creditMessaging.messageText + " ")
             .foregroundColor(textColor)
-        let learnMore = Text(style.creditMessaging.learnMoreText)
+        let learnMore = Text(style.container.creditMessaging.learnMoreText)
             .fontWeight(.semibold)
             .underline(learnMoreColor == nil)
             .foregroundColor(learnMoreColor ?? textColor)
@@ -45,7 +45,7 @@ struct CreditMessagingRow: View {
             .contentShape(Rectangle())
             .onTapGesture { onLearnMore() }
             .accessibilityElement()
-            .accessibilityLabel("\(style.creditMessaging.messageText) \(style.creditMessaging.learnMoreText)")
+            .accessibilityLabel("\(style.container.creditMessaging.messageText) \(style.container.creditMessaging.learnMoreText)")
             .accessibilityAddTraits(.isButton)
             .accessibilityHint("Opens Pay Later details")
     }
