@@ -158,16 +158,15 @@ struct EditFIRow: View {
     }
 
     private func fallbackGlyph(for summary: FiSummary) -> some View {
-        Image(systemName: summary.type.uppercased() == "BANK" ? "building.columns" : "creditcard")
+        Image("FundingIcon", bundle: .payPalPaymentMethod)
             .resizable()
             .scaledToFit()
-            .foregroundColor(textColor)
-            .padding(1)
     }
 
     private var editButton: some View {
         Button(action: onEdit) {
-            Image(systemName: "pencil")
+            Image("EditPencil", bundle: .payPalPaymentMethod)
+                .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
                 .frame(width: editIconSide, height: editIconSide)
