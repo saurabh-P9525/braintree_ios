@@ -3,7 +3,7 @@ import SwiftUI
 import BraintreeCard
 import BraintreeCore
 import BraintreeUIComponents
-import BraintreePayPalPaymentMethod
+import BraintreePayPalSavedPaymentMethod
 import BraintreeVenmo
 import BraintreePayPal
 

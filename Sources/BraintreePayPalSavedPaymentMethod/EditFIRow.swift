@@ -158,14 +158,14 @@ struct EditFIRow: View {
     }
 
     private func fallbackGlyph(for summary: FiSummary) -> some View {
-        Image("FundingIcon", bundle: .payPalPaymentMethod)
+        Image("FundingIcon", bundle: .payPalSavedPaymentMethod)
             .resizable()
             .scaledToFit()
     }
 
     private var editButton: some View {
         Button(action: onEdit) {
-            Image("EditPencil", bundle: .payPalPaymentMethod)
+            Image("EditPencil", bundle: .payPalSavedPaymentMethod)
                 .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
@@ -221,7 +221,7 @@ struct PayPalBrandCluster: View {
     var body: some View {
         HStack(spacing: EditFiStyleGuard.labelLeadingGap(style.container.label.leadingGap)) {
             if style.showLogo {
-                Image("PayPalBadge", bundle: .payPalPaymentMethod)
+                Image("PayPalBadge", bundle: .payPalSavedPaymentMethod)
                     .resizable()
                     .scaledToFit()
                     .frame(width: logoSide, height: logoSide)
