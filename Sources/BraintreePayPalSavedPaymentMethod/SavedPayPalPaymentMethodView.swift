@@ -68,7 +68,8 @@ public struct SavedPayPalPaymentMethodView: View {
     }
 
     private var container: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        // Tighter row gap while loading (skeleton) than in the loaded state.
+        VStack(alignment: .leading, spacing: viewModel.fiState == .loading ? 4 : 6) {
             fiRegion
             creditRegion
         }

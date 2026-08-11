@@ -63,7 +63,7 @@ struct SavedPayPalPaymentMethodSkeletonRow: View {
     var body: some View {
         HStack(spacing: EditFiStyleGuard.fiClusterLeadingGap(style.container.fiCluster.leadingGap)) {
             PayPalBrandCluster(style: style)
-            ShimmerBar(height: 16, cornerRadius: 8, trailingGap: 40)
+            ShimmerBar(height: 16, cornerRadius: 4, trailingGap: 40)
         }
         .accessibilityElement()
         .accessibilityLabel("Loading saved payment method")
@@ -74,7 +74,7 @@ struct SavedPayPalPaymentMethodSkeletonRow: View {
 struct CreditMessageSkeleton: View {
 
     var body: some View {
-        ShimmerBar(height: 16, cornerRadius: 8, trailingGap: 40)
+        ShimmerBar(height: 16, cornerRadius: 4, trailingGap: 40)
             .accessibilityHidden(true)
     }
 }
