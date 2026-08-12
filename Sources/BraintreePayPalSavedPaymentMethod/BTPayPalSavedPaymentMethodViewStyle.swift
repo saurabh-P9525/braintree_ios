@@ -1,6 +1,6 @@
 import UIKit
 
-/// The styling contract for `SavedPayPalPaymentMethodView`.
+/// The styling contract for `BTPayPalSavedPaymentMethodView`.
 ///
 /// Modeled as the view hierarchy itself (mobile-native, matching the Android
 /// `SavedPaymentMethodViewStyle` tree): top-level visibility toggles, a `theme` group for
@@ -11,7 +11,7 @@ import UIKit
 /// `CGFloat` points, with text sizes rendered through Dynamic Type; `@ColorInt` →
 /// `UIColor`; `@FontRes` → `fontName` PostScript string). Merchant-supplied values are
 /// clamped by `EditFiStyleGuard` at render time.
-public struct SavedPayPalPaymentMethodViewStyle {
+public struct BTPayPalSavedPaymentMethodViewStyle {
 
     /// Show the PayPal brand logo. Default: `true`.
     public var showLogo: Bool = true

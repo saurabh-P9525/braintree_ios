@@ -9,7 +9,7 @@ import UIKit
 /// presents the lander (`click_url` webview).
 struct CreditMessagingRow: View {
 
-    let style: SavedPayPalPaymentMethodViewStyle
+    let style: BTPayPalSavedPaymentMethodViewStyle
     let onLearnMore: () -> Void
 
     private var textColor: Color {
@@ -23,7 +23,7 @@ struct CreditMessagingRow: View {
     }
 
     private var font: Font {
-        SavedPayPalPaymentMethodFont.font(
+        BTPayPalSavedPaymentMethodFont.font(
             name: style.theme.fontName,
             size: EditFiStyleGuard.creditMessageFontSize(style.container.creditMessaging.fontSize)
         )

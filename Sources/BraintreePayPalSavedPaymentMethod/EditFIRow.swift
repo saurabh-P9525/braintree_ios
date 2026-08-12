@@ -17,7 +17,7 @@ struct EditFIRow: View {
     }
 
     let content: Content
-    let style: SavedPayPalPaymentMethodViewStyle
+    let style: BTPayPalSavedPaymentMethodViewStyle
     let onEdit: () -> Void
 
     // MARK: - Layout constants
@@ -36,7 +36,7 @@ struct EditFIRow: View {
     }
 
     private var fiFont: Font {
-        SavedPayPalPaymentMethodFont.font(
+        BTPayPalSavedPaymentMethodFont.font(
             name: style.theme.fontName,
             size: EditFiStyleGuard.fiTextFontSize(style.container.fiCluster.textFontSize)
         )
@@ -193,14 +193,14 @@ struct EditFIRow: View {
 /// so the brand stays visible while the FI loads.
 struct PayPalBrandCluster: View {
 
-    let style: SavedPayPalPaymentMethodViewStyle
+    let style: BTPayPalSavedPaymentMethodViewStyle
 
     private var textColor: Color {
         Color(uiColor: style.theme.textColorBase ?? UIColor(white: 0.133, alpha: 1))
     }
 
     private var labelFont: Font {
-        SavedPayPalPaymentMethodFont.font(
+        BTPayPalSavedPaymentMethodFont.font(
             name: style.theme.fontName,
             size: EditFiStyleGuard.labelFontSize(style.container.label.fontSize),
             weight: .bold

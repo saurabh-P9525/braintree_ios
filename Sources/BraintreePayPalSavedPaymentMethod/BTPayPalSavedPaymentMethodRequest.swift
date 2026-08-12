@@ -1,6 +1,6 @@
 import BraintreePayPal
 
-/// The request that configures a `SavedPayPalPaymentMethodView`.
+/// The request that configures a `BTPayPalSavedPaymentMethodView`.
 ///
 /// The buyer's funding instrument is resolved by the SDK from the client token
 /// (the `paymentMethodIdJwt` is extracted internally when the edit flow is wired in),
@@ -8,7 +8,7 @@ import BraintreePayPal
 /// is forwarded, unchanged, to the PayPal client when the buyer taps Edit — exactly
 /// like `PayPalButton` forwards its request — so its amount and required fields must
 /// reflect the live cart at edit time.
-public struct SavedPayPalPaymentMethodRequest {
+public struct BTPayPalSavedPaymentMethodRequest {
 
     // MARK: - Public Properties
 
@@ -25,7 +25,7 @@ public struct SavedPayPalPaymentMethodRequest {
 
     // MARK: - Initializer
 
-    /// Creates a request for `SavedPayPalPaymentMethodView`.
+    /// Creates a request for `BTPayPalSavedPaymentMethodView`.
     /// - Parameters:
     ///   - payPalRequest: The PayPal Checkout request forwarded on edit; its amount drives credit messaging.
     ///   - showCreditMessage: Whether to render the inline credit messaging line. Defaults to `false`.

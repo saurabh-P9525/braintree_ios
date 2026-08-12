@@ -1,7 +1,7 @@
 import Foundation
 
 /// A display-ready summary of the buyer's funding instrument (FI), rendered by
-/// `SavedPayPalPaymentMethodView` and returned inside `SavedPayPalPaymentMethodResult`.
+/// `BTPayPalSavedPaymentMethodView` and returned inside `BTPayPalSavedPaymentMethodResult`.
 ///
 /// This is the UI-facing model. When the fetch API is wired in, the
 /// `fetchVaultedPaymentMethod` response (see the Mobile LLD, API Endpoints section)

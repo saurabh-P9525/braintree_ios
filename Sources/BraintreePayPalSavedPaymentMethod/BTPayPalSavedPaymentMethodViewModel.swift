@@ -2,14 +2,14 @@ import BraintreeCore
 import BraintreePayPal
 import Foundation
 
-/// View model backing `SavedPayPalPaymentMethodView`.
+/// View model backing `BTPayPalSavedPaymentMethodView`.
 ///
 /// Owns the FI load state and the "Learn more" lander presentation, and is the single
 /// seam where the fetch/edit APIs plug in later. Today the networking calls are stubbed
 /// (`onAppear` / `editTapped`) so the component is pure UI; every visual state is still
 /// reachable via the internal preview initializer.
 @MainActor
-final class SavedPayPalPaymentMethodViewModel: ObservableObject {
+final class BTPayPalSavedPaymentMethodViewModel: ObservableObject {
 
     /// The render state of the FI display region. Maps to the fallback matrix in the LLD
     /// (Error Handling & Fallback UI).
@@ -32,8 +32,8 @@ final class SavedPayPalPaymentMethodViewModel: ObservableObject {
     @Published private(set) var fiState: FIState
     @Published var isLanderPresented = false
 
-    let request: SavedPayPalPaymentMethodRequest
-    let style: SavedPayPalPaymentMethodViewStyle
+    let request: BTPayPalSavedPaymentMethodRequest
+    let style: BTPayPalSavedPaymentMethodViewStyle
 
     /// The "Learn more" lander URL, populated from the credit-messaging response when the
     /// API is wired in. `nil` renders a placeholder in the lander.
@@ -41,15 +41,15 @@ final class SavedPayPalPaymentMethodViewModel: ObservableObject {
 
     // MARK: - Private Properties
 
-    private let onResult: (SavedPayPalPaymentMethodResult) -> Void
+    private let onResult: (BTPayPalSavedPaymentMethodResult) -> Void
     private let apiClient: BTAPIClient?
 
     // MARK: - Initializers
 
     init(
-        request: SavedPayPalPaymentMethodRequest,
-        style: SavedPayPalPaymentMethodViewStyle,
-        onResult: @escaping (SavedPayPalPaymentMethodResult) -> Void,
+        request: BTPayPalSavedPaymentMethodRequest,
+        style: BTPayPalSavedPaymentMethodViewStyle,
+        onResult: @escaping (BTPayPalSavedPaymentMethodResult) -> Void,
         apiClient: BTAPIClient?
     ) {
         self.request = request
@@ -63,8 +63,8 @@ final class SavedPayPalPaymentMethodViewModel: ObservableObject {
     /// each visual state without the fetch API.
     init(
         previewState: FIState,
-        request: SavedPayPalPaymentMethodRequest,
-        style: SavedPayPalPaymentMethodViewStyle = SavedPayPalPaymentMethodViewStyle()
+        request: BTPayPalSavedPaymentMethodRequest,
+        style: BTPayPalSavedPaymentMethodViewStyle = BTPayPalSavedPaymentMethodViewStyle()
     ) {
         self.request = request
         self.style = style
@@ -76,9 +76,9 @@ final class SavedPayPalPaymentMethodViewModel: ObservableObject {
     // MARK: - Internal Methods
 
     func onAppear() {
-        apiClient?.sendAnalyticsEvent(SavedPayPalPaymentMethodAnalytics.savedPayPalPaymentMethodPresented)
+        apiClient?.sendAnalyticsEvent(BTPayPalSavedPaymentMethodAnalytics.savedPayPalPaymentMethodPresented)
         if request.showCreditMessage, style.showCreditMessaging {
-            apiClient?.sendAnalyticsEvent(SavedPayPalPaymentMethodAnalytics.creditMessagingPresented)
+            apiClient?.sendAnalyticsEvent(BTPayPalSavedPaymentMethodAnalytics.creditMessagingPresented)
         }
 
         // TODO: [API integration] Resolve the sticky FI for initial display.
@@ -94,7 +94,7 @@ final class SavedPayPalPaymentMethodViewModel: ObservableObject {
     }
 
     func editTapped() {
-        apiClient?.sendAnalyticsEvent(SavedPayPalPaymentMethodAnalytics.savedPayPalPaymentMethodEditSelected)
+        apiClient?.sendAnalyticsEvent(BTPayPalSavedPaymentMethodAnalytics.savedPayPalPaymentMethodEditSelected)
 
         // TODO: [API integration] Launch the edit paysheet.
         // Build/forward `request.payPalRequest` (with app switch enabled) to
@@ -105,7 +105,7 @@ final class SavedPayPalPaymentMethodViewModel: ObservableObject {
     }
 
     func learnMoreTapped() {
-        apiClient?.sendAnalyticsEvent(SavedPayPalPaymentMethodAnalytics.creditMessagingSelected)
+        apiClient?.sendAnalyticsEvent(BTPayPalSavedPaymentMethodAnalytics.creditMessagingSelected)
         isLanderPresented = true
     }
 }

@@ -4,7 +4,7 @@ import UIKit
 /// Builds fonts for the component from the style's `fontName` and size fields, always
 /// rendering through Dynamic Type so text respects the user's accessibility text-size
 /// setting (the iOS equivalent of Android `sp`, per the styling doc §3.4).
-enum SavedPayPalPaymentMethodFont {
+enum BTPayPalSavedPaymentMethodFont {
 
     /// - Parameters:
     ///   - name: Registered custom-font PostScript name, or `nil` for the system font.

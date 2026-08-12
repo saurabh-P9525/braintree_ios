@@ -1,6 +1,6 @@
 import CoreGraphics
 
-/// Platform-agnostic guardrails for `SavedPayPalPaymentMethodViewStyle` (styling doc §4).
+/// Platform-agnostic guardrails for `BTPayPalSavedPaymentMethodViewStyle` (styling doc §4).
 ///
 /// Per the approved styling doc, every spacing/sizing/font-size field floors at `0`
 /// (never negative) with **no upper cap** — merchants have full discretion above the

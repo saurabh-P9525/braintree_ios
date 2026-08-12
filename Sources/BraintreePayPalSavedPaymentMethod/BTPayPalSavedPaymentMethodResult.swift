@@ -1,8 +1,8 @@
 import BraintreePayPal
 
-/// The terminal outcome of a `SavedPayPalPaymentMethodView` edit flow, delivered to the
+/// The terminal outcome of a `BTPayPalSavedPaymentMethodView` edit flow, delivered to the
 /// merchant's `onResult` callback.
-public enum SavedPayPalPaymentMethodResult {
+public enum BTPayPalSavedPaymentMethodResult {
 
     /// The buyer changed the funding instrument and the order was tokenized successfully.
     /// - Parameters:

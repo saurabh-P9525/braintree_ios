@@ -1,6 +1,6 @@
 import Foundation
 
-enum SavedPayPalPaymentMethodAnalytics {
+enum BTPayPalSavedPaymentMethodAnalytics {
 
     // MARK: - Saved Payment Method Events
 

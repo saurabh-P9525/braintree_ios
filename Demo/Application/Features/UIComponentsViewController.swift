@@ -48,9 +48,9 @@ private struct UIComponentsDemoView: View {
     @State private var savedFIStateIndex: Int = 1
     @State private var showSavedCreditMessage: Bool = true
 
-    /// Maps the segmented selection to a `SavedPayPalPaymentMethodView` render state. Uses the
+    /// Maps the segmented selection to a `BTPayPalSavedPaymentMethodView` render state. Uses the
     /// public preview initializer so every state is visible before the fetch API is wired.
-    private var savedPreviewState: SavedPayPalPaymentMethodPreviewState {
+    private var savedPreviewState: BTPayPalSavedPaymentMethodPreviewState {
         switch savedFIStateIndex {
         case 0:
             return .loading
@@ -116,7 +116,7 @@ private struct UIComponentsDemoView: View {
                     SwiftUI.Toggle("Show credit (Pay Later) message", isOn: $showSavedCreditMessage)
                         .font(.caption)
 
-                    SavedPayPalPaymentMethodView(
+                    BTPayPalSavedPaymentMethodView(
                         previewState: savedPreviewState,
                         showCreditMessage: showSavedCreditMessage
                     )

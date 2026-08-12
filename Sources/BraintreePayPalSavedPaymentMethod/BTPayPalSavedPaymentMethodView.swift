@@ -13,31 +13,31 @@ import UIKit
 ///
 /// > Note: The fetch/edit network calls are not yet wired in; the component renders its
 /// > loading and result states from the view model, which is where those APIs plug in.
-public struct SavedPayPalPaymentMethodView: View {
+public struct BTPayPalSavedPaymentMethodView: View {
 
     // MARK: - Private Properties
 
-    @StateObject private var viewModel: SavedPayPalPaymentMethodViewModel
+    @StateObject private var viewModel: BTPayPalSavedPaymentMethodViewModel
 
-    private var style: SavedPayPalPaymentMethodViewStyle { viewModel.style }
+    private var style: BTPayPalSavedPaymentMethodViewStyle { viewModel.style }
 
     // MARK: - Initializer
 
-    /// Creates a `SavedPayPalPaymentMethodView`.
+    /// Creates a `BTPayPalSavedPaymentMethodView`.
     /// - Parameters:
     ///   - authorization: Required. A valid client token or tokenization key. The saved FI is
     ///     resolved from the client token.
     ///   - request: Required. The request configuring the component (checkout request + credit-message toggle).
-    ///   - style: Optional. Styling overrides. Defaults to the shipped `SavedPayPalPaymentMethodViewStyle`.
-    ///   - onResult: Called with the terminal `SavedPayPalPaymentMethodResult` after an edit flow completes.
+    ///   - style: Optional. Styling overrides. Defaults to the shipped `BTPayPalSavedPaymentMethodViewStyle`.
+    ///   - onResult: Called with the terminal `BTPayPalSavedPaymentMethodResult` after an edit flow completes.
     public init(
         authorization: String,
-        request: SavedPayPalPaymentMethodRequest,
-        style: SavedPayPalPaymentMethodViewStyle = SavedPayPalPaymentMethodViewStyle(),
-        onResult: @escaping (SavedPayPalPaymentMethodResult) -> Void
+        request: BTPayPalSavedPaymentMethodRequest,
+        style: BTPayPalSavedPaymentMethodViewStyle = BTPayPalSavedPaymentMethodViewStyle(),
+        onResult: @escaping (BTPayPalSavedPaymentMethodResult) -> Void
     ) {
         _viewModel = StateObject(
-            wrappedValue: SavedPayPalPaymentMethodViewModel(
+            wrappedValue: BTPayPalSavedPaymentMethodViewModel(
                 request: request,
                 style: style,
                 onResult: onResult,
@@ -47,7 +47,7 @@ public struct SavedPayPalPaymentMethodView: View {
     }
 
     /// Internal initializer for previews and tests — seeds a concrete render state.
-    init(viewModel: SavedPayPalPaymentMethodViewModel) {
+    init(viewModel: BTPayPalSavedPaymentMethodViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
@@ -91,7 +91,7 @@ public struct SavedPayPalPaymentMethodView: View {
     @ViewBuilder private var fiRegion: some View {
         switch viewModel.fiState {
         case .loading:
-            SavedPayPalPaymentMethodSkeletonRow(style: style)
+            BTPayPalSavedPaymentMethodSkeletonRow(style: style)
         case .instrument(let summary):
             EditFIRow(content: .instrument(summary), style: style) { viewModel.editTapped() }
         case .displayOnly(let email):
@@ -132,9 +132,9 @@ public struct SavedPayPalPaymentMethodView: View {
 /// Render-state selector for the demo/preview initializer below.
 ///
 /// - Note: This is a temporary seam for demos, SwiftUI previews, and UI tests while the
-///   fetch API is not yet wired. It is expected to be removed once `SavedPayPalPaymentMethodView`
+///   fetch API is not yet wired. It is expected to be removed once `BTPayPalSavedPaymentMethodView`
 ///   resolves its own state from the network.
-public enum SavedPayPalPaymentMethodPreviewState: Equatable {
+public enum BTPayPalSavedPaymentMethodPreviewState: Equatable {
     case loading
     case instrument(FiSummary)
     case displayOnly(email: String)
@@ -142,22 +142,22 @@ public enum SavedPayPalPaymentMethodPreviewState: Equatable {
     case hidden
 }
 
-extension SavedPayPalPaymentMethodView {
+extension BTPayPalSavedPaymentMethodView {
 
     /// Seeds a concrete render state, bypassing the fetch API (not yet wired). Intended for
     /// demos, SwiftUI previews, and UI tests only.
     ///
     /// - Note: Temporary — remove once the component resolves its state from the network.
     public init(
-        previewState: SavedPayPalPaymentMethodPreviewState,
+        previewState: BTPayPalSavedPaymentMethodPreviewState,
         showCreditMessage: Bool = false,
-        style: SavedPayPalPaymentMethodViewStyle = SavedPayPalPaymentMethodViewStyle()
+        style: BTPayPalSavedPaymentMethodViewStyle = BTPayPalSavedPaymentMethodViewStyle()
     ) {
-        let request = SavedPayPalPaymentMethodRequest(
+        let request = BTPayPalSavedPaymentMethodRequest(
             payPalRequest: BTPayPalCheckoutRequest(amount: "0"),
             showCreditMessage: showCreditMessage
         )
-        let fiState: SavedPayPalPaymentMethodViewModel.FIState
+        let fiState: BTPayPalSavedPaymentMethodViewModel.FIState
         switch previewState {
         case .loading:
             fiState = .loading
@@ -170,35 +170,35 @@ extension SavedPayPalPaymentMethodView {
         case .hidden:
             fiState = .hidden
         }
-        self.init(viewModel: SavedPayPalPaymentMethodViewModel(previewState: fiState, request: request, style: style))
+        self.init(viewModel: BTPayPalSavedPaymentMethodViewModel(previewState: fiState, request: request, style: style))
     }
 }
 
 // MARK: - Previews
 
-struct SavedPayPalPaymentMethodView_Previews: PreviewProvider {
+struct BTPayPalSavedPaymentMethodView_Previews: PreviewProvider {
 
-    private static let request = SavedPayPalPaymentMethodRequest(
+    private static let request = BTPayPalSavedPaymentMethodRequest(
         payPalRequest: BTPayPalCheckoutRequest(amount: "324.50"),
         showCreditMessage: true
     )
 
     private static func preview(
         _ title: String,
-        _ state: SavedPayPalPaymentMethodViewModel.FIState,
-        style: SavedPayPalPaymentMethodViewStyle = SavedPayPalPaymentMethodViewStyle()
+        _ state: BTPayPalSavedPaymentMethodViewModel.FIState,
+        style: BTPayPalSavedPaymentMethodViewStyle = BTPayPalSavedPaymentMethodViewStyle()
     ) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title).font(.caption).foregroundColor(.secondary)
-            SavedPayPalPaymentMethodView(
-                viewModel: SavedPayPalPaymentMethodViewModel(previewState: state, request: request, style: style)
+            BTPayPalSavedPaymentMethodView(
+                viewModel: BTPayPalSavedPaymentMethodViewModel(previewState: state, request: request, style: style)
             )
             .border(Color.gray.opacity(0.2))
         }
     }
 
-    private static var borderedStyle: SavedPayPalPaymentMethodViewStyle {
-        var style = SavedPayPalPaymentMethodViewStyle()
+    private static var borderedStyle: BTPayPalSavedPaymentMethodViewStyle {
+        var style = BTPayPalSavedPaymentMethodViewStyle()
         style.container.cornerRadius = 8
         style.container.borderColor = .systemGray4
         style.container.borderWidth = 1
