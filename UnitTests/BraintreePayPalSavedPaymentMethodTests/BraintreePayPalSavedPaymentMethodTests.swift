@@ -3,8 +3,8 @@ import XCTest
 
 /// Unit test scaffolding for the `BraintreePayPalSavedPaymentMethod` module.
 ///
-/// Add unit tests here for the models (`FiSummary`, request/result), the styling
-/// contract and `EditFiStyleGuard` clamps, and `BTPayPalSavedPaymentMethodViewModel`
+/// Add unit tests here for the models (`BTPayPalSavedPaymentMethodFISummary`, request/result),
+/// the styling contract and `EditFiStyleGuard` clamps, and `BTPayPalSavedPaymentMethodViewModel`
 /// state/analytics (use `MockAPIClient` from `BraintreeTestShared`).
 final class BraintreePayPalSavedPaymentMethodTests: XCTestCase {
 

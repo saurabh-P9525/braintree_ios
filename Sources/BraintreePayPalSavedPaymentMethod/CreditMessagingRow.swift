@@ -4,9 +4,9 @@ import UIKit
 /// The inline credit (Pay Later) messaging line rendered below the FI row when the request
 /// sets `showCreditMessage` and the style keeps messaging enabled.
 ///
-/// The copy comes from `CreditMessagingStyle` today (placeholder text); when the API is
-/// wired in it is replaced by the fetched offer's content blocks. Tapping "Learn more"
-/// presents the lander (`click_url` webview).
+/// The copy comes from `BTPayPalSavedPaymentMethodViewStyle.CreditMessaging` today (placeholder
+/// text); when the API is wired in it is replaced by the fetched offer's content blocks. Tapping
+/// "Learn more" presents the lander (`click_url` webview).
 struct CreditMessagingRow: View {
 
     let style: BTPayPalSavedPaymentMethodViewStyle

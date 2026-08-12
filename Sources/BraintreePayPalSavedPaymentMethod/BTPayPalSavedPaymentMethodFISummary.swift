@@ -7,7 +7,7 @@ import Foundation
 /// `fetchVaultedPaymentMethod` response (see the Mobile LLD, API Endpoints section)
 /// maps into this type. It deliberately carries only presentation fields — never the
 /// PMT, Billing Agreement ID, or any other sensitive identifier.
-public struct FiSummary: Equatable {
+public struct BTPayPalSavedPaymentMethodFISummary: Equatable {
 
     // MARK: - Public Properties
 

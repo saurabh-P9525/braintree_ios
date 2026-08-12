@@ -18,7 +18,7 @@ final class BTPayPalSavedPaymentMethodViewModel: ObservableObject {
         case loading
         /// An instrument was resolved. A `nil` `imageURL` renders the generic fallback glyph;
         /// long labels ellipsize (truncation case).
-        case instrument(FiSummary)
+        case instrument(BTPayPalSavedPaymentMethodFISummary)
         /// No instrument, but the buyer email is known — show the email with the edit affordance.
         case displayOnly(email: String)
         /// FI unavailable (e.g. no network) — hide the FI text but keep the PayPal brand mark.
@@ -84,8 +84,8 @@ final class BTPayPalSavedPaymentMethodViewModel: ObservableObject {
         // TODO: [API integration] Resolve the sticky FI for initial display.
         // Call `BTVaultedPaymentMethodClient(...).fetchStickyFI()` (STICKY_FI +
         // paymentMethodIdJwt extracted from the client token), then map the returned
-        // FiSummary into `fiState`:
-        //   - instrument present            → .instrument(FiSummary)
+        // BTPayPalSavedPaymentMethodFISummary into `fiState`:
+        //   - instrument present            → .instrument(BTPayPalSavedPaymentMethodFISummary)
         //   - payer email only              → .displayOnly(email:)
         //   - no network                    → .brandOnly
         //   - no FI and no email / failure  → .hidden  (+ savedPayPalPaymentMethodFetchFailed)

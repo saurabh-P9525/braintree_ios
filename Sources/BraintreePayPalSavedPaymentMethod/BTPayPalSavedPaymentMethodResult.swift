@@ -9,7 +9,7 @@ public enum BTPayPalSavedPaymentMethodResult {
     ///   - nonce: The tokenized PayPal account nonce to send to your server for the transaction.
     ///   - paymentToken: The approved-checkout order/payment token.
     ///   - fiSummary: The refreshed funding-instrument summary now reflected in the UI.
-    case success(nonce: BTPayPalAccountNonce, paymentToken: String, fiSummary: FiSummary)
+    case success(nonce: BTPayPalAccountNonce, paymentToken: String, fiSummary: BTPayPalSavedPaymentMethodFISummary)
 
     /// The buyer dismissed the paysheet without approving. The original sticky FI is kept.
     case cancel

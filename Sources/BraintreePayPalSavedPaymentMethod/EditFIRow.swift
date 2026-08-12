@@ -11,7 +11,7 @@ import UIKit
 struct EditFIRow: View {
 
     enum Content: Equatable {
-        case instrument(FiSummary)
+        case instrument(BTPayPalSavedPaymentMethodFISummary)
         case displayOnly(email: String)
         case brandOnly
     }
@@ -114,7 +114,7 @@ struct EditFIRow: View {
         }
     }
 
-    @ViewBuilder private func fiIcon(for summary: FiSummary) -> some View {
+    @ViewBuilder private func fiIcon(for summary: BTPayPalSavedPaymentMethodFISummary) -> some View {
         Group {
             if let url = summary.imageURL {
                 AsyncImage(url: url) { phase in
@@ -157,7 +157,7 @@ struct EditFIRow: View {
         }
     }
 
-    private func fallbackGlyph(for summary: FiSummary) -> some View {
+    private func fallbackGlyph(for summary: BTPayPalSavedPaymentMethodFISummary) -> some View {
         Image("FundingIcon", bundle: .payPalSavedPaymentMethod)
             .resizable()
             .scaledToFit()
@@ -180,7 +180,7 @@ struct EditFIRow: View {
 
     // MARK: - Helpers
 
-    private func fiText(for summary: FiSummary) -> String {
+    private func fiText(for summary: BTPayPalSavedPaymentMethodFISummary) -> String {
         guard let lastDigits = summary.lastDigits, !lastDigits.isEmpty else {
             return summary.label
         }

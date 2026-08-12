@@ -56,7 +56,7 @@ private struct UIComponentsDemoView: View {
             return .loading
         case 1:
             return .instrument(
-                FiSummary(
+                BTPayPalSavedPaymentMethodFISummary(
                     type: "CARD",
                     label: "Visa",
                     lastDigits: "0199",
@@ -64,9 +64,9 @@ private struct UIComponentsDemoView: View {
                 )
             )
         case 2:
-            return .instrument(FiSummary(type: "BANK", label: "CREDIT UNION 1", lastDigits: "3357"))
+            return .instrument(BTPayPalSavedPaymentMethodFISummary(type: "BANK", label: "CREDIT UNION 1", lastDigits: "3357"))
         case 3:
-            return .instrument(FiSummary(type: "CARD", label: "A Very Long Funding Instrument Bank Name", lastDigits: "1234"))
+            return .instrument(BTPayPalSavedPaymentMethodFISummary(type: "CARD", label: "A Very Long Funding Instrument Bank Name", lastDigits: "1234"))
         case 4:
             return .displayOnly(email: "buyer@example.com")
         case 5:

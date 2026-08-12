@@ -23,133 +23,135 @@ public struct BTPayPalSavedPaymentMethodViewStyle {
     /// (Only rendered when the request also sets `showCreditMessage`.)
     public var showCreditMessaging: Bool = true
 
-    public var theme: ThemeStyle = ThemeStyle()
-    public var container: ContainerStyle = ContainerStyle()
+    public var theme: Theme = Theme()
+    public var container: Container = Container()
 
     public init() {}
-}
 
-/// Global type & color. Applies to the label, FI text, and credit messaging.
-public struct ThemeStyle {
+    // MARK: - Nested style types
 
-    /// Component background color. Default: white.
-    public var backgroundColor: UIColor? = .white
+    /// Global type & color. Applies to the label, FI text, and credit messaging.
+    public struct Theme {
 
-    /// Base text color for label, FI text, and credit messaging. Default: ≈ `#222222`.
-    public var textColorBase: UIColor? = UIColor(white: 0.133, alpha: 1)
+        /// Component background color. Default: white.
+        public var backgroundColor: UIColor? = .white
 
-    /// Accent color for the credit-messaging "Learn more" link. When `nil`, the link is
-    /// distinguished by bold + underline in the base text color instead.
-    public var linkColor: UIColor?
+        /// Base text color for label, FI text, and credit messaging. Default: ≈ `#222222`.
+        public var textColorBase: UIColor? = UIColor(white: 0.133, alpha: 1)
 
-    /// Registered custom-font PostScript name. `nil` → system font. Mirrors Android `@FontRes`.
-    public var fontName: String?
+        /// Accent color for the credit-messaging "Learn more" link. When `nil`, the link is
+        /// distinguished by bold + underline in the base text color instead.
+        public var linkColor: UIColor?
 
-    public init() {}
-}
+        /// Registered custom-font PostScript name. `nil` → system font. Mirrors Android `@FontRes`.
+        public var fontName: String?
 
-/// The outer container box plus its positioned sub-views.
-public struct ContainerStyle {
+        public init() {}
+    }
 
-    /// Fixed height. `nil` → intrinsic / wrap content (default).
-    public var height: CGFloat?
+    /// The outer container box plus its positioned sub-views.
+    public struct Container {
 
-    /// Leading/trailing padding. Default: 0.
-    public var horizontalPadding: CGFloat = 0
+        /// Fixed height. `nil` → intrinsic / wrap content (default).
+        public var height: CGFloat?
 
-    /// Top/bottom padding. Default: 10.
-    public var verticalPadding: CGFloat = 10
+        /// Leading/trailing padding. Default: 0.
+        public var horizontalPadding: CGFloat = 0
 
-    /// Container corner radius. Default: 0.
-    public var cornerRadius: CGFloat = 0
+        /// Top/bottom padding. Default: 10.
+        public var verticalPadding: CGFloat = 10
 
-    /// Container border color. Default: transparent (no visible border).
-    public var borderColor: UIColor? = .clear
+        /// Container corner radius. Default: 0.
+        public var cornerRadius: CGFloat = 0
 
-    /// Container border width. Default: 0.
-    public var borderWidth: CGFloat = 0
+        /// Container border color. Default: transparent (no visible border).
+        public var borderColor: UIColor? = .clear
 
-    public var logo: LogoStyle = LogoStyle()
-    public var label: LabelStyle = LabelStyle()
-    public var fiCluster: FiClusterStyle = FiClusterStyle()
-    public var creditMessaging: CreditMessagingStyle = CreditMessagingStyle()
+        /// Container border width. Default: 0.
+        public var borderWidth: CGFloat = 0
 
-    public init() {}
-}
+        public var logo: Logo = Logo()
+        public var label: Label = Label()
+        public var fiCluster: FiCluster = FiCluster()
+        public var creditMessaging: CreditMessaging = CreditMessaging()
 
-/// The PayPal brand logo.
-public struct LogoStyle {
+        public init() {}
+    }
 
-    /// Side of the square (1:1) logo container. `nil` → 48×48 default. The 48×30 logo artwork
-    /// scales to fit inside, keeping its aspect ratio; growing this value grows both sides equally.
-    public var width: CGFloat?
+    /// The PayPal brand logo.
+    public struct Logo {
 
-    public init() {}
-}
+        /// Side of the square (1:1) logo container. `nil` → 48×48 default. The 48×30 logo artwork
+        /// scales to fit inside, keeping its aspect ratio; growing this value grows both sides equally.
+        public var width: CGFloat?
 
-/// The "PayPal" text label.
-public struct LabelStyle {
+        public init() {}
+    }
 
-    /// Label text size. Default: 20 pt · Dynamic Type (floor 0).
-    public var fontSize: CGFloat = 20
+    /// The "PayPal" text label.
+    public struct Label {
 
-    /// Gap between the logo and the label. Default: 12.73 (floor 0).
-    public var leadingGap: CGFloat = 12.73
+        /// Label text size. Default: 20 pt · Dynamic Type (floor 0).
+        public var fontSize: CGFloat = 20
 
-    public init() {}
-}
+        /// Gap between the logo and the label. Default: 12.73 (floor 0).
+        public var leadingGap: CGFloat = 12.73
 
-/// The funding-instrument cluster: card art + last digits + edit pencil, inside a pill.
-public struct FiClusterStyle {
+        public init() {}
+    }
 
-    /// FI text size. Default: 14 pt · Dynamic Type (floor 0).
-    public var textFontSize: CGFloat = 14
+    /// The funding-instrument cluster: card art + last digits + edit pencil, inside a pill.
+    public struct FiCluster {
 
-    /// Edit (pencil) affordance size. Default: 16 pt (floor 0).
-    public var editIconSize: CGFloat = 16
+        /// FI text size. Default: 14 pt · Dynamic Type (floor 0).
+        public var textFontSize: CGFloat = 14
 
-    /// Gap between the label cluster and the FI cluster. Default: 8 (floor 0).
-    public var leadingGap: CGFloat = 8
+        /// Edit (pencil) affordance size. Default: 16 pt (floor 0).
+        public var editIconSize: CGFloat = 16
 
-    /// Background color of the FI pill. `nil` → no pill. Default: `#F0F2F9`.
-    public var backgroundColor: UIColor? = UIColor(red: 240 / 255, green: 242 / 255, blue: 249 / 255, alpha: 1)
+        /// Gap between the label cluster and the FI cluster. Default: 8 (floor 0).
+        public var leadingGap: CGFloat = 8
 
-    /// FI pill corner radius. Default: 6 (floor 0).
-    public var cornerRadius: CGFloat = 6
+        /// Background color of the FI pill. `nil` → no pill. Default: `#F0F2F9`.
+        public var backgroundColor: UIColor? = UIColor(red: 240 / 255, green: 242 / 255, blue: 249 / 255, alpha: 1)
 
-    /// FI pill horizontal (leading/trailing) padding. Default: 8 (floor 0).
-    public var horizontalPadding: CGFloat = 8
+        /// FI pill corner radius. Default: 6 (floor 0).
+        public var cornerRadius: CGFloat = 6
 
-    /// FI pill vertical (top/bottom) padding. Default: 4 (floor 0).
-    public var verticalPadding: CGFloat = 4
+        /// FI pill horizontal (leading/trailing) padding. Default: 8 (floor 0).
+        public var horizontalPadding: CGFloat = 8
 
-    /// Optional background color behind the FI card art icon. `nil` → none.
-    public var cardIconBackgroundColor: UIColor?
+        /// FI pill vertical (top/bottom) padding. Default: 4 (floor 0).
+        public var verticalPadding: CGFloat = 4
 
-    /// Corner radius for the FI card art icon. Default: 3 (floor 0).
-    public var cardIconCornerRadius: CGFloat = 3
+        /// Optional background color behind the FI card art icon. `nil` → none.
+        public var cardIconBackgroundColor: UIColor?
 
-    /// Border color for the FI card art icon. `nil` → no border. Default: `#CCCCCC`.
-    public var cardIconBorderColor: UIColor? = UIColor(white: 0.8, alpha: 1)
+        /// Corner radius for the FI card art icon. Default: 3 (floor 0).
+        public var cardIconCornerRadius: CGFloat = 3
 
-    /// Border width for the FI card art icon. Default: 0.71 pt hairline (floor 0).
-    public var cardIconBorderWidth: CGFloat = 0.71
+        /// Border color for the FI card art icon. `nil` → no border. Default: `#CCCCCC`.
+        public var cardIconBorderColor: UIColor? = UIColor(white: 0.8, alpha: 1)
 
-    public init() {}
-}
+        /// Border width for the FI card art icon. Default: 0.71 pt hairline (floor 0).
+        public var cardIconBorderWidth: CGFloat = 0.71
 
-/// The inline credit (Pay Later) messaging line.
-public struct CreditMessagingStyle {
+        public init() {}
+    }
 
-    /// Messaging text size. Default: 16 pt · Dynamic Type (floor 0).
-    public var fontSize: CGFloat = 16
+    /// The inline credit (Pay Later) messaging line.
+    public struct CreditMessaging {
 
-    /// Internal placeholder copy for testing — not part of the public styling API. Replaced by
-    /// the fetched offer copy when the messaging API is wired in.
-    var messageText: String = "Or 4 interest-free payments of $324.50."
+        /// Messaging text size. Default: 16 pt · Dynamic Type (floor 0).
+        public var fontSize: CGFloat = 16
 
-    /// Internal placeholder "Learn more" copy for testing — not part of the public styling API.
-    var learnMoreText: String = "Learn more"
+        /// Internal placeholder copy for testing — not part of the public styling API. Replaced by
+        /// the fetched offer copy when the messaging API is wired in.
+        var messageText: String = "Or 4 interest-free payments of $324.50."
 
-    public init() {}
+        /// Internal placeholder "Learn more" copy for testing — not part of the public styling API.
+        var learnMoreText: String = "Learn more"
+
+        public init() {}
+    }
 }

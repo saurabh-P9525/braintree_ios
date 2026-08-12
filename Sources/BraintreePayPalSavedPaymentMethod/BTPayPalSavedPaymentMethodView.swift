@@ -136,7 +136,7 @@ public struct BTPayPalSavedPaymentMethodView: View {
 ///   resolves its own state from the network.
 public enum BTPayPalSavedPaymentMethodPreviewState: Equatable {
     case loading
-    case instrument(FiSummary)
+    case instrument(BTPayPalSavedPaymentMethodFISummary)
     case displayOnly(email: String)
     case brandOnly
     case hidden
@@ -211,19 +211,19 @@ struct BTPayPalSavedPaymentMethodView_Previews: PreviewProvider {
             VStack(alignment: .leading, spacing: 16) {
                 preview("Loading (skeleton)", .loading)
                 preview("Instrument — card with art", .instrument(
-                    FiSummary(type: "CARD", label: "Visa", lastDigits: "0199",
+                    BTPayPalSavedPaymentMethodFISummary(type: "CARD", label: "Visa", lastDigits: "0199",
                               imageURL: URL(string: "https://www.paypalobjects.com/visa.png"))
                 ))
                 preview("Instrument — no image (fallback glyph)", .instrument(
-                    FiSummary(type: "BANK", label: "CREDIT UNION 1", lastDigits: "3357")
+                    BTPayPalSavedPaymentMethodFISummary(type: "BANK", label: "CREDIT UNION 1", lastDigits: "3357")
                 ))
                 preview("Instrument — truncation", .instrument(
-                    FiSummary(type: "CARD", label: "A Very Long Funding Instrument Bank Name", lastDigits: "1234")
+                    BTPayPalSavedPaymentMethodFISummary(type: "CARD", label: "A Very Long Funding Instrument Bank Name", lastDigits: "1234")
                 ))
                 preview("Display-only (email)", .displayOnly(email: "buyer@example.com"))
                 preview("Brand only (no network)", .brandOnly)
                 preview("Bordered container", .instrument(
-                    FiSummary(type: "CARD", label: "Mastercard", lastDigits: "4444")
+                    BTPayPalSavedPaymentMethodFISummary(type: "CARD", label: "Mastercard", lastDigits: "4444")
                 ), style: borderedStyle)
             }
             .padding()
