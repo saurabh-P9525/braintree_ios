@@ -70,7 +70,8 @@ final class BTPayPalSavedPaymentMethodClient {
 
         switch fundingInstrumentType {
         case .stickyFI:
-            guard let jwt = apiClient.authorization.paymentMethodIDJWT else {
+            let clientToken = apiClient.authorization as? ClientTokenAuthorizationProviding
+            guard let jwt = clientToken?.paymentMethodIDJWT else {
                 throw BTPayPalSavedPaymentMethodError.missingPaymentMethodIDJWT
             }
 
