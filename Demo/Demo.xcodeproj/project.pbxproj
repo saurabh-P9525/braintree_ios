@@ -90,6 +90,8 @@
 		FE1000000000000000000002 /* BraintreePayPalSavedPaymentMethod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE1000000000000000000001 /* BraintreePayPalSavedPaymentMethod.framework */; };
 		FE1000000000000000000003 /* BraintreePayPalSavedPaymentMethod.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE1000000000000000000001 /* BraintreePayPalSavedPaymentMethod.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FE1000000000000000000007 /* PayPalSavedPaymentMethodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1000000000000000000006 /* PayPalSavedPaymentMethodViewController.swift */; };
+		FE1000000000000000000009 /* PayPalSavedPaymentMethodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1000000000000000000008 /* PayPalSavedPaymentMethodView.swift */; };
+		FE1000000000000000000011 /* PayPalSavedPaymentMethodStyleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1000000000000000000010 /* PayPalSavedPaymentMethodStyleEditor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -220,6 +222,8 @@
 		C8E5BAD1DA81AAD310B19786 /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		FE1000000000000000000001 /* BraintreePayPalSavedPaymentMethod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreePayPalSavedPaymentMethod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE1000000000000000000006 /* PayPalSavedPaymentMethodViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPalSavedPaymentMethodViewController.swift; sourceTree = "<group>"; };
+		FE1000000000000000000008 /* PayPalSavedPaymentMethodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPalSavedPaymentMethodView.swift; sourceTree = "<group>"; };
+		FE1000000000000000000010 /* PayPalSavedPaymentMethodStyleEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPalSavedPaymentMethodStyleEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +322,7 @@
 			isa = PBXGroup;
 			children = (
 				04DDF4612EE8AA1200FBDE49 /* PaymentButtonHelper.swift */,
+				FE1000000000000000000010 /* PayPalSavedPaymentMethodStyleEditor.swift */,
 				803FB9DD26D93146002BF92D /* BTCardFormView.swift */,
 				BEAAAD042970A70D000BD296 /* BTSEPADirectDebitTestHelper.swift */,
 				BED461822AD072D9001B0DDF /* CardHelpers.swift */,
@@ -396,6 +401,7 @@
 				BE67CDBF2B29FF7B00BA4904 /* PayPalMessagingViewController.swift */,
 				BED7C4C92ABDD35700EF8550 /* PayPalWebCheckoutViewController.swift */,
 				FE1000000000000000000006 /* PayPalSavedPaymentMethodViewController.swift */,
+				FE1000000000000000000008 /* PayPalSavedPaymentMethodView.swift */,
 				BE777AC327D9370400487D23 /* SEPADirectDebitViewController.swift */,
 				0827D164300131C100D26DC4 /* SEPADirectDebitView.swift */,
 				8028B9752B28C9E100C88CE8 /* ShopperInsightsViewController.swift */,
@@ -728,6 +734,8 @@
 				62240F5A2B67FE1100ECE5C9 /* TextFieldWithLabel.swift in Sources */,
 				BED7C4CA2ABDD35700EF8550 /* PayPalWebCheckoutViewController.swift in Sources */,
 				FE1000000000000000000007 /* PayPalSavedPaymentMethodViewController.swift in Sources */,
+				FE1000000000000000000009 /* PayPalSavedPaymentMethodView.swift in Sources */,
+				FE1000000000000000000011 /* PayPalSavedPaymentMethodStyleEditor.swift in Sources */,
 				BEBD52872AABA513005D6687 /* ThreeDSecureViewController.swift in Sources */,
 				803FB9DE26D93146002BF92D /* BTCardFormView.swift in Sources */,
 				BE45D7162AD97C340047E2C7 /* ContainmentViewController.swift in Sources */,
