@@ -149,11 +149,11 @@ struct EditFIRow: View {
                         // In flight — stay blank so the glyph doesn't flash before the art arrives.
                         Color.clear
                     default:
-                        fallbackGlyph
+                        fallbackGlyph(for: summary.type)
                     }
                 }
             } else {
-                fallbackGlyph
+                fallbackGlyph(for: summary.type)
             }
         }
         .frame(
@@ -177,9 +177,10 @@ struct EditFIRow: View {
             )
     }
 
-    /// One generic glyph covers every instrument type — design ships a single fallback asset.
-    private var fallbackGlyph: some View {
-        Image("FundingIcon", bundle: .payPalSavedPaymentMethod)
+    /// Shown when the card art is missing or fails to load. Only banks get the bank glyph;
+    /// every other instrument falls back to the card glyph.
+    private func fallbackGlyph(for type: BTPayPalSavedPaymentMethodType?) -> some View {
+        Image(type == .bank ? "BankFundingIcon" : "CardFundingIcon", bundle: .payPalSavedPaymentMethod)
             .resizable()
             .scaledToFit()
     }

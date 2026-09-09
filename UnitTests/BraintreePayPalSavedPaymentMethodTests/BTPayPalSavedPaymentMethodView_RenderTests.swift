@@ -109,6 +109,29 @@ final class BTPayPalSavedPaymentMethodView_RenderTests: XCTestCase {
         try render(view(state: .instrument(try instrument(imageURL: nil))))
     }
 
+    /// A card with no art and a bank with no art must not render the same glyph.
+    func testRender_cardAndBankFallbackGlyphsDiffer() throws {
+        let card = try instrument(type: "CARD", label: "Visa", lastDigits: "1234", imageURL: nil)
+        let bank = try instrument(type: "BANK", label: "Visa", lastDigits: "1234", imageURL: nil)
+
+        let cardImage = try render(view(state: .instrument(card))).pngData()
+        let bankImage = try render(view(state: .instrument(bank))).pngData()
+
+        XCTAssertNotEqual(cardImage, bankImage)
+    }
+
+    /// Only banks get the bank glyph; an unrecognised type is treated as a card rather than
+    /// rendering a third, generic glyph.
+    func testRender_unknownTypeFallsBackToTheCardGlyph() throws {
+        let unknown = try instrument(type: "SOME_FUTURE_TYPE", label: "Visa", lastDigits: "1234", imageURL: nil)
+        let card = try instrument(type: "CARD", label: "Visa", lastDigits: "1234", imageURL: nil)
+
+        let unknownImage = try render(view(state: .instrument(unknown))).pngData()
+        let cardImage = try render(view(state: .instrument(card))).pngData()
+
+        XCTAssertEqual(unknownImage, cardImage)
+    }
+
     func testRender_bankInstrument_rendersBankGlyph() throws {
         let fi = try instrument(type: "BANK", label: "CREDIT UNION 1", lastDigits: "0199")
         try render(view(state: .instrument(fi)))

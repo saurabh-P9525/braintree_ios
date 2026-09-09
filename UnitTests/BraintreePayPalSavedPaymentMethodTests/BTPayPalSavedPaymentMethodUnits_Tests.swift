@@ -109,10 +109,22 @@ final class PayPalSavedPaymentMethodBundle_Tests: XCTestCase {
     func testBundle_resolvesAndContainsComponentAssets() {
         let bundle = Bundle.payPalSavedPaymentMethod
 
-        XCTAssertNotNil(
-            UIImage(named: "LoadingSpinner", in: bundle, compatibleWith: nil),
-            "LoadingSpinner missing from \(bundle.bundlePath)"
-        )
+        for asset in ["LoadingSpinner", "CardFundingIcon", "BankFundingIcon", "EditPencil", "PayPalBadge"] {
+            XCTAssertNotNil(
+                UIImage(named: asset, in: bundle, compatibleWith: nil),
+                "\(asset) missing from \(bundle.bundlePath)"
+            )
+        }
+    }
+
+    /// Card and bank fall back to different glyphs, so a regression that collapsed them onto one
+    /// asset would otherwise be invisible.
+    func testFallbackGlyphs_areDistinctPerFundingInstrumentType() throws {
+        let bundle = Bundle.payPalSavedPaymentMethod
+        let card = try XCTUnwrap(UIImage(named: "CardFundingIcon", in: bundle, compatibleWith: nil)).pngData()
+        let bank = try XCTUnwrap(UIImage(named: "BankFundingIcon", in: bundle, compatibleWith: nil)).pngData()
+
+        XCTAssertNotEqual(card, bank)
     }
 }
 
