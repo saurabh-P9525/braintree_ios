@@ -90,12 +90,12 @@ final class BTPayPalSavedPaymentMethodFont_Tests: XCTestCase {
 
 final class PayPalSavedPaymentMethodBundle_Tests: XCTestCase {
 
-    /// The component's card-art and edit assets are loaded from this bundle at render time,
+    /// The component's card-art and spinner assets are loaded from this bundle at render time,
     /// so a mis-resolved bundle surfaces as silently missing artwork rather than a build error.
     func testBundle_resolvesAndContainsComponentAssets() {
         let bundle = Bundle.payPalSavedPaymentMethod
 
-        for asset in ["CardFundingIcon", "BankFundingIcon", "EditPencil", "PayPalBadge"] {
+        for asset in ["LoadingSpinner", "CardFundingIcon", "BankFundingIcon", "EditPencil", "PayPalBadge"] {
             XCTAssertNotNil(
                 UIImage(named: asset, in: bundle, compatibleWith: nil),
                 "\(asset) missing from \(bundle.bundlePath)"
