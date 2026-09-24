@@ -88,6 +88,32 @@ final class BTPayPalSavedPaymentMethodFont_Tests: XCTestCase {
     }
 }
 
+final class PayPalSavedPaymentMethodBundle_Tests: XCTestCase {
+
+    /// The component's card-art and edit assets are loaded from this bundle at render time,
+    /// so a mis-resolved bundle surfaces as silently missing artwork rather than a build error.
+    func testBundle_resolvesAndContainsComponentAssets() {
+        let bundle = Bundle.payPalSavedPaymentMethod
+
+        for asset in ["CardFundingIcon", "BankFundingIcon", "EditPencil", "PayPalBadge"] {
+            XCTAssertNotNil(
+                UIImage(named: asset, in: bundle, compatibleWith: nil),
+                "\(asset) missing from \(bundle.bundlePath)"
+            )
+        }
+    }
+
+    /// Card and bank fall back to different glyphs, so a regression that collapsed them onto one
+    /// asset would otherwise be invisible.
+    func testFallbackGlyphs_areDistinctPerFundingInstrumentType() throws {
+        let bundle = Bundle.payPalSavedPaymentMethod
+        let card = try XCTUnwrap(UIImage(named: "CardFundingIcon", in: bundle, compatibleWith: nil)).pngData()
+        let bank = try XCTUnwrap(UIImage(named: "BankFundingIcon", in: bundle, compatibleWith: nil)).pngData()
+
+        XCTAssertNotEqual(card, bank)
+    }
+}
+
 final class BTPayPalSavedPaymentMethodViewStyle_Tests: XCTestCase {
 
     /// These three are opt-out, not opt-in: a merchant who passes no style gets the full component.
