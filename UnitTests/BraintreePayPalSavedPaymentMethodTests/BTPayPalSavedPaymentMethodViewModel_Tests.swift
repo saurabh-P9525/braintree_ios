@@ -60,12 +60,14 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
         )
     }
 
-    private static func payerOnlyResponse(isEditable: Bool = true) -> BTJSON {
-        BTJSON(
+    private static func payerOnlyResponse(isEditable: Bool? = true) -> BTJSON {
+        var payer: [String: Any] = ["email": "buyer@example.com"]
+        payer["editable"] = isEditable
+        return BTJSON(
             value: [
                 "data": [
                     "paypalFundingInstrumentDetails": [
-                        "payer": ["email": "buyer@example.com", "editable": isEditable],
+                        "payer": payer,
                         "paymentMethods": []
                     ]
                 ]
@@ -116,8 +118,11 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
 
     // MARK: - Initial state
 
-    func testInit_startsInTheLoadingState() {
-        XCTAssertEqual(makeSUT().fiState, .loading)
+    func testInit_startsInTheLoadingStateWithCreditMessagingShown() {
+        let sut = makeSUT()
+
+        XCTAssertEqual(sut.fiState, .loading)
+        XCTAssertTrue(sut.showsCreditMessaging)
     }
 
     // MARK: - onAppear
@@ -126,7 +131,7 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
         mockAPIClient.cannedResponseBody = Self.instrumentResponse()
         let sut = makeSUT()
 
-        sut.onAppear(request: makeRequest(), showCreditMessaging: false)
+        sut.onAppear(request: makeRequest(merchantAccountID: "fake-merchant-account-id"), showCreditMessaging: false)
         await drainTasks()
 
         guard case .instrument(let summary) = sut.fiState else {
@@ -134,23 +139,13 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
         }
         XCTAssertEqual(summary.label, "Visa")
         XCTAssertEqual(summary.lastDigits, "0199")
+        XCTAssertTrue(sut.showsCreditMessaging)
+        let input = (mockAPIClient.lastPOSTParameters?["variables"] as? [String: Any])?["input"] as? [String: Any]
+        XCTAssertEqual(input?["merchantAccountId"] as? String, "fake-merchant-account-id")
     }
 
-    /// A failed fetch must never block checkout, so the brand mark stays. The Pay Later offer is
-    /// quoted against the funding instrument, so it must not survive one we could not resolve.
-    func testOnAppear_whenTheFIFetchFails_fallsBackToBrandOnlyAndHidesCreditMessaging() async {
-        mockAPIClient.cannedResponseError = NSError(domain: "com.example.error", code: 1)
-        let sut = makeSUT()
-
-        sut.onAppear(request: makeRequest(), showCreditMessaging: true)
-        await drainTasks()
-
-        XCTAssertEqual(sut.fiState, .brandOnly)
-        XCTAssertFalse(sut.showsCreditMessaging)
-    }
-
-    /// Derived rather than latched, so a messaging response landing after the failure cannot
-    /// reinstate the row.
+    /// A failed fetch must never block checkout, so the brand mark stays. The Pay Later offer is quoted
+    /// against the funding instrument, so it must not survive, even if its response already landed.
     func testShowsCreditMessaging_whenCreditMessagingResolvesBeforeTheFIFetchFails_staysHidden() async {
         let sut = makeSUT()
         await seedCreditMessage(on: sut, clickURL: "https://example.com/lander", isEmbeddable: true)
@@ -171,17 +166,17 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
         mockAPIClient.cannedResponseBody = Self.payerOnlyResponse()
         let sut = makeSUT()
 
-        sut.onAppear(request: makeRequest(), showCreditMessaging: false)
+        sut.onAppear(request: makeRequest(), showCreditMessaging: true)
         await drainTasks()
 
         XCTAssertEqual(sut.fiState, .displayOnly(email: "buyer@example.com", isEditable: true))
         XCTAssertTrue(sut.showsCreditMessaging)
     }
 
-    /// A payer who cannot change the funding instrument cannot act on the offer, so it is hidden
-    /// along with the edit pencil.
+    /// A payer who cannot change the funding instrument cannot act on the offer, so it is hidden along
+    /// with the edit pencil. A missing `editable` is treated as not editable.
     func testOnAppear_whenThePayerIsNotEditable_hidesCreditMessaging() async {
-        mockAPIClient.cannedResponseBody = Self.payerOnlyResponse(isEditable: false)
+        mockAPIClient.cannedResponseBody = Self.payerOnlyResponse(isEditable: nil)
         let sut = makeSUT()
 
         sut.onAppear(request: makeRequest(), showCreditMessaging: false)
@@ -189,29 +184,6 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
 
         XCTAssertEqual(sut.fiState, .displayOnly(email: "buyer@example.com", isEditable: false))
         XCTAssertFalse(sut.showsCreditMessaging)
-    }
-
-    func testShowsCreditMessaging_whileLoadingAndForInstruments_isTrue() async {
-        let sut = makeSUT()
-        XCTAssertTrue(sut.showsCreditMessaging)
-
-        mockAPIClient.cannedResponseBody = Self.instrumentResponse()
-        sut.onAppear(request: makeRequest(), showCreditMessaging: false)
-        await drainTasks()
-
-        XCTAssertTrue(sut.showsCreditMessaging)
-    }
-
-    func testOnAppear_passesTheMerchantAccountIDFromTheRequest() async {
-        mockAPIClient.cannedResponseBody = Self.instrumentResponse()
-        let sut = makeSUT()
-
-        sut.onAppear(request: makeRequest(merchantAccountID: "fake-merchant-account-id"), showCreditMessaging: false)
-        await drainTasks()
-
-        let parameters = mockAPIClient.lastPOSTParameters
-        let input = (parameters?["variables"] as? [String: Any])?["input"] as? [String: Any]
-        XCTAssertEqual(input?["merchantAccountId"] as? String, "fake-merchant-account-id")
     }
 
     func testOnAppear_whenCreditMessagingIsDisabled_doesNotFetchIt() async {
@@ -456,34 +428,6 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
         guard case .instrument = BTPayPalSavedPaymentMethodViewModel.state(from: summary) else {
             return XCTFail("Expected .instrument")
         }
-    }
-
-    func testStateFromSummary_whenOnlyAPayerIsPresent_returnsDisplayOnly() throws {
-        let summary = try XCTUnwrap(
-            BTPayPalSavedPaymentMethodSummary(
-                json: BTJSON(
-                    value: ["payer": ["email": "buyer@example.com", "editable": true], "paymentMethods": []] as [String: Any]
-                )
-            )
-        )
-
-        XCTAssertEqual(
-            BTPayPalSavedPaymentMethodViewModel.state(from: summary),
-            .displayOnly(email: "buyer@example.com", isEditable: true)
-        )
-    }
-
-    func testStateFromSummary_whenThePayerIsNotEditable_marksItNotEditable() throws {
-        let summary = try XCTUnwrap(
-            BTPayPalSavedPaymentMethodSummary(
-                json: BTJSON(value: ["payer": ["email": "buyer@example.com"], "paymentMethods": []] as [String: Any])
-            )
-        )
-
-        XCTAssertEqual(
-            BTPayPalSavedPaymentMethodViewModel.state(from: summary),
-            .displayOnly(email: "buyer@example.com", isEditable: false)
-        )
     }
 
     func testStateFromSummary_whenNeitherIsPresent_hidesTheComponent() throws {
