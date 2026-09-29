@@ -294,9 +294,13 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
 
     // MARK: - Edit result delivery
 
-    private func injectPayPalClient(nonce: String? = nil, error: Error? = nil) throws {
+    private func injectPayPalClient(nonce: String? = nil, orderID: String? = nil, error: Error? = nil) throws {
         let mockPayPalClient = MockPayPalClient(authorization: clientToken)
-        mockPayPalClient.cannedNonce = try nonce.map { try XCTUnwrap(BTPayPalAccountNonce(json: BTJSON(value: ["nonce": $0]))) }
+        mockPayPalClient.cannedNonce = try nonce.map {
+            var details: [String: Any] = [:]
+            details["paymentToken"] = orderID
+            return try XCTUnwrap(BTPayPalAccountNonce(json: BTJSON(value: ["nonce": $0, "details": details])))
+        }
         mockPayPalClient.cannedError = error
         fetchClient.payPalClient = mockPayPalClient
     }
@@ -346,6 +350,49 @@ final class BTPayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
         sut.editTapped(checkoutRequest: BTPayPalCheckoutRequest(amount: "1"), request: makeRequest())
         await drainTasks()
 
+        XCTAssertEqual(receivedNonce?.nonce, "fake-nonce")
+    }
+
+    // MARK: - Refetch after edit
+
+    func testEdit_whenItSucceeds_refetchesTheFIForTheApprovedOrderAndShowsIt() async throws {
+        try injectPayPalClient(nonce: "fake-nonce", orderID: "fake-order-id")
+        mockAPIClient.cannedResponseBody = Self.instrumentResponse(label: "Mastercard", lastDigits: "4444")
+        let sut = makeSUT()
+
+        sut.editTapped(
+            checkoutRequest: BTPayPalCheckoutRequest(amount: "1"),
+            request: makeRequest(merchantAccountID: "fake-merchant-account-id")
+        )
+        await drainTasks()
+
+        let parameters = try XCTUnwrap(mockAPIClient.lastPOSTParameters)
+        let input = try XCTUnwrap((parameters["variables"] as? [String: Any])?["input"] as? [String: Any])
+        XCTAssertEqual(input["fundingInstrumentType"] as? String, "FI_FROM_APPROVED_CHECKOUT")
+        XCTAssertEqual(input["orderId"] as? String, "fake-order-id")
+        XCTAssertEqual(input["merchantAccountId"] as? String, "fake-merchant-account-id")
+
+        guard case .instrument(let summary) = sut.fiState else {
+            return XCTFail("Expected .instrument, got \(sut.fiState)")
+        }
+        XCTAssertEqual(summary.label, "Mastercard")
+        XCTAssertEqual(summary.lastDigits, "4444")
+    }
+
+    /// The pre-edit instrument will no longer be charged, so it must not be shown again.
+    func testEdit_whenTheRefetchFails_hidesTheRowButStillDeliversTheNonce() async throws {
+        try injectPayPalClient(nonce: "fake-nonce", orderID: "fake-order-id")
+        mockAPIClient.cannedResponseBody = Self.instrumentResponse()
+        var receivedNonce: BTPayPalAccountNonce?
+        let sut = makeSUT { nonce, _ in receivedNonce = nonce }
+        sut.onAppear(request: makeRequest(), showCreditMessaging: false)
+        await drainTasks()
+        mockAPIClient.cannedResponseError = NSError(domain: "com.example.error", code: 1)
+
+        sut.editTapped(checkoutRequest: BTPayPalCheckoutRequest(amount: "1"), request: makeRequest())
+        await drainTasks()
+
+        XCTAssertEqual(sut.fiState, .hidden)
         XCTAssertEqual(receivedNonce?.nonce, "fake-nonce")
     }
 
