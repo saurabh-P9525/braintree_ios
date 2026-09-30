@@ -165,6 +165,16 @@ final class BTPayPalSavedPaymentMethodView_RenderTests: SavedPaymentMethodRender
         }
     }
 
+    // MARK: - Loading placeholders
+
+    func testRender_skeletonRow() throws {
+        try render(BTPayPalSavedPaymentMethodSkeletonRow(style: BTPayPalSavedPaymentMethodViewStyle()))
+    }
+
+    func testRender_creditMessageSkeleton() throws {
+        try render(CreditMessageSkeleton())
+    }
+
     // MARK: - Assets
 
     func testBundle_containsTheLoadingSpinner() {

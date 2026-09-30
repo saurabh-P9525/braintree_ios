@@ -83,14 +83,6 @@ final class BTPayPalSavedPaymentMethodRows_RenderTests: SavedPaymentMethodRender
 
     // MARK: - Child rows in isolation
 
-    func testRender_skeletonRow() throws {
-        try render(BTPayPalSavedPaymentMethodSkeletonRow(style: BTPayPalSavedPaymentMethodViewStyle()))
-    }
-
-    func testRender_creditMessageSkeleton() throws {
-        try render(CreditMessageSkeleton())
-    }
-
     func testRender_editFIRow_allContentCases() throws {
         let cases: [EditFIRow.Content] = [
             .instrument(try instrument()),
