@@ -181,6 +181,8 @@ final class PayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
         let sut = makeSUT()
         await seedCreditMessage(on: sut, clickURL: "https://example.com/lander", isEmbeddable: true)
         XCTAssertNotNil(sut.creditMessage)
+        XCTAssertEqual(sut.fiState, .loading)
+        XCTAssertNil(sut.displayedCreditMessage)
 
         mockAPIClient.cannedResponseBody = nil
         mockAPIClient.cannedResponseError = NSError(domain: "com.example.error", code: 1)
@@ -189,6 +191,21 @@ final class PayPalSavedPaymentMethodViewModel_Tests: XCTestCase {
 
         XCTAssertEqual(sut.fiState, .brandOnly)
         XCTAssertFalse(sut.showsCreditMessaging)
+        XCTAssertNil(sut.displayedCreditMessage)
+    }
+
+    /// A Pay Later message that lands first waits for the FI, then shows once the FI resolves.
+    func testDisplayedCreditMessage_whenCreditMessagingResolvesBeforeTheFI_showsOnlyAfterTheFIResolves() async {
+        let sut = makeSUT()
+        await seedCreditMessage(on: sut, clickURL: "https://example.com/lander", isEmbeddable: true)
+        XCTAssertNil(sut.displayedCreditMessage)
+
+        mockAPIClient.cannedResponseBody = Self.instrumentResponse()
+        sut.onAppear(request: makeRequest(), showCreditMessaging: false)
+        await settle(sut)
+
+        XCTAssertEqual(sut.displayedCreditMessage, sut.creditMessage)
+        XCTAssertNotNil(sut.displayedCreditMessage)
     }
 
     /// An empty `paymentMethods` alongside an editable payer is a successful fetch, not a failure,

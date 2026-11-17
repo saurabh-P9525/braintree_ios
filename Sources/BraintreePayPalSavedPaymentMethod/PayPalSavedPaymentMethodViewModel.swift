@@ -98,6 +98,13 @@ final class PayPalSavedPaymentMethodViewModel: ObservableObject {
         }
     }
 
+    /// The Pay Later message to render. Held back while the FI loads, even if it already arrived, so it never
+    /// flashes and then disappears when the FI fetch fails.
+    var displayedCreditMessage: CreditMessageContent? {
+        guard fiState != .loading, showsCreditMessaging else { return nil }
+        return creditMessage
+    }
+
     /// The latest buyer default billing agreement fetch. Exposed for testing.
     private(set) var fiFetchTask: Task<Void, Never>?
 

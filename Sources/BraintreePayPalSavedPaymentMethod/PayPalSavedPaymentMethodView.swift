@@ -174,7 +174,9 @@ public struct PayPalSavedPaymentMethodView: View {
     @ViewBuilder private var creditRegion: some View {
         if style.showPayPalCreditMessaging, viewModel.showsCreditMessaging {
             Group {
-                if let content = viewModel.creditMessage {
+                if viewModel.fiState == .loading {
+                    CreditMessageSkeleton()
+                } else if let content = viewModel.displayedCreditMessage {
                     CreditMessagingRow(
                         style: style,
                         message: content.message,
@@ -183,8 +185,6 @@ public struct PayPalSavedPaymentMethodView: View {
                     ) {
                         viewModel.learnMoreTapped()
                     }
-                } else if viewModel.fiState == .loading {
-                    CreditMessageSkeleton()
                 }
             }
             .padding(.leading, creditLeadingInset)
