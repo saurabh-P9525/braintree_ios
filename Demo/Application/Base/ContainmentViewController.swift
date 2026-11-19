@@ -100,6 +100,7 @@ class ContainmentViewController: UIViewController {
     // MARK: - UI Handlers
 
     @objc func tappedRefresh() {
+        currentPaymentMethodNonce = nil
         reloadIntegration()
     }
 
@@ -119,7 +120,8 @@ class ContainmentViewController: UIViewController {
             let nonce = currentPaymentMethodNonce.nonce
             updateStatus("Creating Transaction…")
 
-            let merchantAccountID = currentPaymentMethodNonce.type == "UnionPay" ? "fake_switch_usd" : nil
+            let isIdeal = UserDefaults.standard.string(forKey: "BraintreeDemoSettingsIntegration") == "IdealViewController"
+            let merchantAccountID = isIdeal ? "ideal_eur" : (currentPaymentMethodNonce.type == "UnionPay" ? "fake_switch_usd" : nil)
 
             BraintreeDemoMerchantAPIClient.shared.makeTransaction(
                 paymentMethodNonce: nonce,
@@ -249,6 +251,8 @@ class ContainmentViewController: UIViewController {
             return UIComponentsViewController(authorization: authorization)
         case "PayPalMessagingViewController":
             return PayPalMessagingViewController(authorization: authorization)
+        case "PayPalSavedPaymentMethodViewController":
+            return PayPalSavedPaymentMethodViewController(authorization: authorization)
         default:
             return PayPalWebCheckoutViewController(authorization: authorization)
         }
@@ -276,6 +280,7 @@ extension ContainmentViewController: IASKSettingsDelegate {
 
     func settingsViewControllerDidEnd(_ settingsViewController: IASKAppSettingsViewController) {
         settingsViewController.dismiss(animated: true)
+        currentPaymentMethodNonce = nil
         reloadIntegration()
     }
 }
